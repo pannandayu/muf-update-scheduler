@@ -16,11 +16,11 @@ const NavItems: React.FC<{ title: string; href: string }> = ({
   const [showModal, setShowModal] = useState(true);
 
   useEffect(() => {
-    if (router.isReady || router.asPath === href) {
+    if (router.asPath === href) {
       setIsNavigating(false);
       setClickCount(0);
     }
-  }, [router.isReady, router.asPath]);
+  }, [router.asPath]);
 
   return (
     <Fragment>

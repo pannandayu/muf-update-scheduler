@@ -55,8 +55,8 @@ const ReactTable: <T extends object>({
               {row.cells.map((cell) => {
                 return (
                   <motion.td
-                    initial={{ y: -10, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
+                    initial={{ x: -15, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
                     transition={{ duration: 0.2 }}
                     {...cell.getCellProps()}
                   >

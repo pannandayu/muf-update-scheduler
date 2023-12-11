@@ -19,22 +19,19 @@ const InputPGSearchByApplicationID: React.FC<{
   onPostData: (data: InputDataInterface) => void;
   onResetErrorSearchStatus: Dispatch<SetStateAction<string | undefined>>;
 }> = ({ onPostData, onResetErrorSearchStatus }) => {
-  const applicationIDRef = useRef<HTMLInputElement>(null);
-
+  const dataContext = useContext(DataContext);
   const [buttonDisabled, setButtonDisabled] = useState<boolean | undefined>(
     undefined
   );
-
   const [errorObject, setErrorObject] = useState<{
     errorPath: string[];
     errorMessage: string[];
   } | null>(null);
-
   const [errorMessage, setErrorMessage] = useState<string | undefined>(
     undefined
   );
-
-  const dataContext = useContext(DataContext);
+  
+  const applicationIDRef = useRef<HTMLInputElement>(null);
 
   const applicationIDSubmitHandler: React.FormEventHandler = async (
     event: FormEvent

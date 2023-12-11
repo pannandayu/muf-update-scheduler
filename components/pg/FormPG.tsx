@@ -16,33 +16,29 @@ import MaritalStatusAndSpousePGInterface from "@/interfaces/pg/MaritalStatusAndS
 import InputPGSearchByApplicationID from "./InputPGSearchByApplicationID";
 import MongoDataClass from "@/classes/mongo/MongoDataClass";
 
+const errorClassName = `${inputStyles.input} ${inputStyles["input-error"]}`;
+
 const FormPG: React.FC<{ switchHandler: (state: boolean) => void }> = ({
   switchHandler,
 }) => {
-  const orderIdRef = useRef<HTMLInputElement>(null);
-  const appIdRef = useRef<HTMLInputElement>(null);
-  const namaDebiturRef = useRef<HTMLInputElement>(null);
-  const noKtpRef = useRef<HTMLInputElement>(null);
-
+  const dataContext = useContext(DataContext);
+  const [buttonDisabled, setButtonDisabled] = useState<boolean | undefined>(
+    undefined
+  );
+  const [errorMessage, setErrorMessage] = useState<string | undefined>(
+    undefined
+  );
+  const [buttonSearchByApplicationID, setButtonSearchByApplicationID] =
+    useState<boolean>(false);
   const [errorObject, setErrorObject] = useState<{
     errorPath: string[];
     errorMessage: string[];
   } | null>(null);
 
-  const [buttonDisabled, setButtonDisabled] = useState<boolean | undefined>(
-    undefined
-  );
-
-  const [errorMessage, setErrorMessage] = useState<string | undefined>(
-    undefined
-  );
-
-  const [buttonSearchByApplicationID, setButtonSearchByApplicationID] =
-    useState<boolean>(false);
-
-  const dataContext = useContext(DataContext);
-
-  const errorClassName = `${inputStyles.input} ${inputStyles["input-error"]}`;
+  const orderIdRef = useRef<HTMLInputElement>(null);
+  const appIdRef = useRef<HTMLInputElement>(null);
+  const namaDebiturRef = useRef<HTMLInputElement>(null);
+  const noKtpRef = useRef<HTMLInputElement>(null);
 
   const submitHandler: React.FormEventHandler = (event: React.FormEvent) => {
     event.preventDefault();
@@ -311,9 +307,9 @@ const FormPG: React.FC<{ switchHandler: (state: boolean) => void }> = ({
           form={"PG"}
         />
       )}
-      <h4 style={{ color: "red", textAlign: "center" }}>
-        {errorMessage ? errorMessage : undefined}
-      </h4>
+      {errorMessage && (
+        <h4 style={{ color: "red", textAlign: "center" }}>{errorMessage}</h4>
+      )}
     </Card>
   );
 };

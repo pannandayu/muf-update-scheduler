@@ -103,8 +103,10 @@ export default function Home(props: { password: string }) {
           </motion.div>
         </ModalCard>
       )}
-      <h1>Find your client here.</h1>
-      <h2>You can search by...</h2>
+      <h1 style={{ marginBottom: "0.5rem" }}>Find your client here.</h1>
+      <h2 style={{ marginTop: 0, marginBottom: "1rem" }}>
+        You can search by...
+      </h2>
       <Title form={formIsPG ? "PG" : "Mongo"} />
       <div style={{ display: "flex" }}>
         <FormSwitch

@@ -10,27 +10,24 @@ import DataContext from "@/context/data-context";
 import SearchStatus from "../SearchStatus";
 import MongoDataClass from "@/classes/mongo/MongoDataClass";
 
+const errorClassName = `${inputStyles.input} ${inputStyles["input-error"]}`;
+
 const FormMongo: React.FC<{ switchHandler: (state: boolean) => void }> = ({
   switchHandler,
 }) => {
-  const applicationIdRef = useRef<HTMLInputElement>(null);
-
   const dataContext = useContext(DataContext);
-
   const [buttonDisabled, setButtonDisabled] = useState<boolean | undefined>(
     undefined
   );
-
   const [errorMessage, setErrorMessage] = useState<string | undefined>(
     undefined
   );
-
   const [errorObject, setErrorObject] = useState<{
     errorPath: string[];
     errorMessage: string[];
   } | null>(null);
 
-  const errorClassName = `${inputStyles.input} ${inputStyles["input-error"]}`;
+  const applicationIdRef = useRef<HTMLInputElement>(null);
 
   const submitHandler: React.FormEventHandler = (event: React.FormEvent) => {
     event.preventDefault();
@@ -130,13 +127,7 @@ const FormMongo: React.FC<{ switchHandler: (state: boolean) => void }> = ({
           }
           ref={applicationIdRef}
         />
-        {
-          <p>
-            {errorObject?.errorMessage.filter((e) =>
-              e.includes("Application ID")
-            )}
-          </p>
-        }
+        {<p>{errorObject?.errorMessage.filter((e) => e.includes("14"))}</p>}
         <motion.button
           className={styles["submit-button"]}
           whileHover={{ scale: 1.1 }}
@@ -166,9 +157,9 @@ const FormMongo: React.FC<{ switchHandler: (state: boolean) => void }> = ({
           form={"Mongo"}
         />
       )}
-      <h5 style={{ color: "red", textAlign: "center" }}>
-        {errorMessage ? errorMessage : undefined}
-      </h5>
+      {errorMessage && (
+        <h5 style={{ color: "red", textAlign: "center" }}>{errorMessage}</h5>
+      )}
     </Card>
   );
 };

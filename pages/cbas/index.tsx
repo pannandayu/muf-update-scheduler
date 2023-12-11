@@ -40,15 +40,27 @@ const CBASQueIndex: React.FC<{
     responseAgentCbas?.agentCbas || [{ ip_address: "", userid: "" }]
   );
 
-  const refetchTimeRef = useRef<HTMLInputElement>(null);
+  const refetchIntervalRef = useRef<HTMLInputElement>(null);
   const intervalIdRef = useRef<NodeJS.Timeout | null>(null);
   const safetyCheckRef = useRef<boolean>(false);
 
   const changeRefetchTimeHandler = (event: React.FormEvent) => {
     event.preventDefault();
-    if (refetchTimeRef.current?.value) {
-      setRefetchInterval(+refetchTimeRef?.current?.value);
-      refetchTimeRef.current.value = "";
+    if (refetchIntervalRef.current?.value) {
+      setRefetchInterval(+refetchIntervalRef.current.value);
+      refetchIntervalRef.current.value = "";
+    }
+  };
+
+  const pauseHandler = (event: React.MouseEvent) => {
+    event.preventDefault();
+    if (isPaused) {
+      setIsPaused(false);
+      setRefetchInterval(prevRefetchInterval);
+    } else {
+      setIsPaused(true);
+      setPrevRefetchInterval(refetchInterval);
+      setRefetchInterval(100000000);
     }
   };
 
@@ -84,18 +96,6 @@ const CBASQueIndex: React.FC<{
       }
     } catch (error: any) {
       console.log(error);
-    }
-  };
-
-  const pauseHandler = (event: React.MouseEvent) => {
-    event.preventDefault();
-    if (isPaused) {
-      setIsPaused(false);
-      setRefetchInterval(prevRefetchInterval);
-    } else {
-      setIsPaused(true);
-      setPrevRefetchInterval(refetchInterval);
-      setRefetchInterval(100000000);
     }
   };
 
@@ -167,7 +167,7 @@ const CBASQueIndex: React.FC<{
               idForName="interval"
               type="number"
               className={inputStyles.input}
-              ref={refetchTimeRef}
+              ref={refetchIntervalRef}
             />
             <motion.button
               whileTap={{ scale: 0.8 }}
@@ -185,15 +185,26 @@ const CBASQueIndex: React.FC<{
             >
               {isPaused ? "Resume" : "Pause"}
             </motion.button>
-            <motion.button
-              whileTap={{ scale: 0.8 }}
-              style={{ backgroundColor: "purple" }}
-              className={styles["interval-button"]}
-              type="submit"
-              onClick={() => setSwitchTable((prevState) => !prevState)}
-            >
-              Switch
-            </motion.button>
+            <AnimatePresence mode="wait">
+              <motion.button
+                key={switchTable.toString()}
+                whileTap={{ scale: 0.8 }}
+                style={{ backgroundColor: "purple" }}
+                className={styles["interval-button"]}
+                type="submit"
+                onClick={() => setSwitchTable((prevState) => !prevState)}
+              >
+                <motion.span
+                  key={`span-${switchTable.toString()}`}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.1 }}
+                >
+                  {switchTable ? "List CBAS Que" : "List CBAS Agent"}
+                </motion.span>
+              </motion.button>
+            </AnimatePresence>
           </form>
         </div>
         <AnimatePresence mode="wait">
@@ -210,11 +221,7 @@ const CBASQueIndex: React.FC<{
               marginTop: "5%",
             }}
           >
-            {!switchTable ? (
-              <h1>CBAS Ques Table</h1>
-            ) : (
-              <h1>CBAS Agent Table</h1>
-            )}
+            <h1>{!switchTable ? "CBAS Ques Table" : "CBAS Agent Table"}</h1>
           </motion.div>
         </AnimatePresence>
       </div>
@@ -261,7 +268,7 @@ const createColumns = () => {
 
   const agentCbasTableColumns: Column<CBASData>[] = useMemo(
     () => [
-      { Header: "User id", accessor: "userid" as keyof CBASData },
+      { Header: "User ID", accessor: "userid" as keyof CBASData },
       { Header: "IP Address", accessor: "ip_address" },
     ],
     []

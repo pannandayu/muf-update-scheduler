@@ -13,8 +13,8 @@ interface AllPGDataInterface {
   spouseInfo: MaritalStatusAndSpousePGInterface;
   slikResponseLog: SLIKRequestAttemptPGnterface[];
   screeningResults: GradingResultPGInterface;
-  mongoAdditionalData?: {
-    aggregateBrms?: string;
+  mongoAdditionalData: {
+    aggregateBrms: string;
     currentFormDesc: string;
   };
 }

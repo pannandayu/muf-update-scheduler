@@ -56,7 +56,14 @@ const joinParam = (word: string): string => {
   }
 
   const splittedWord = word.split("_");
-  return splittedWord[0].concat(" ").concat(splittedWord[1]);
+  const capitalWordFront = splittedWord[0][0].toUpperCase();
+  const capitalWordBack = splittedWord[1][0].toUpperCase();
+
+  return capitalWordFront
+    .concat(splittedWord[0].slice(1, splittedWord[0].length))
+    .concat(" ")
+    .concat(capitalWordBack)
+    .concat(splittedWord[1].slice(1, splittedWord[1].length));
 };
 
 export default SearchParameters;
