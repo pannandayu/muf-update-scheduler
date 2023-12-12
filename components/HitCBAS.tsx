@@ -30,18 +30,16 @@ const HitCBAS: React.FC<{
   );
 
   useEffect(() => {
-    setCbasDataPersonal(new CBASPersonalInfo());
-    setCbasDataSpouse(new CBASSpouseInfo());
-    setCbasDataAggregate(new CBASAggregateInfo());
+    resetData();
     setHitButtonText(0);
-    setCbasError(undefined);
   }, [requestId, maritalStatus]);
 
   const postCbasHandler = async () => {
+    resetData();
     setHitCbas(true);
     setHitButtonText(1);
     setSearchingCbas(true);
-    setCbasError(undefined);
+
     console.log("Requesting to CBAS now!");
 
     let appIdPersonal = requestId + "101";
@@ -177,6 +175,13 @@ const HitCBAS: React.FC<{
       </div>
     </CardDataBox>
   );
+
+  const resetData = (): void => {
+    setCbasDataPersonal(new CBASPersonalInfo());
+    setCbasDataSpouse(new CBASSpouseInfo());
+    setCbasDataAggregate(new CBASAggregateInfo());
+    setCbasError(undefined);
+  };
 
   return (
     <div className={styles["client-data"]}>
