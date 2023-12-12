@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import styles from "@/styles/DataBox.module.css";
 import SLIKRequestAttemptPG from "./SLIKRequestAttempt";
 import GradingResultHistoryPG from "./GradingResultHistoryPG";
@@ -59,44 +59,48 @@ const DashboardPG: React.FC<{
   }, [data]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -30 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.3 }}
-      className={styles["data-box"]}
-    >
-      <div className={styles.dashboard}>
-        <h1>Client's Data </h1>
-        <h1>Request ID: {personalInfoPG.app_id.split("I")[0] + "I"}</h1>
-        <h1>Current Form: {mongoAddsData.currentFormDesc} </h1>
-      </div>
-      <hr />
-      <div className={styles.frame}>
-        <PersonalInfoPG data={personalInfoPG} />
-        <SpouseInfoPG data={spouseInfoPG} />
-      </div>
-      <div className={styles.frame}>
-        <SLIKRequestAttemptPG data={slikRequestInfoPG} />
-      </div>
-      <div className={styles.frame}>
-        <GradingResultHistoryPG data={gradingResultHistoryPG} />
-      </div>
-      <div className={styles.frame}>
-        <h2 style={{ marginTop: "0.75rem", marginBottom: "0.75rem" }}>
-          BRMS Personal SLIK Aggregate Result =
-          <span style={{ fontWeight: "lighter", color: "#843636" }}>
-            {" "}
-            {mongoAddsData.aggregateBrms}
-          </span>
-        </h2>
-      </div>
-      <div className={styles.frame}>
-        <HitCBAS
-          maritalStatus={spouseInfoPG.maritalStatus}
-          requestId={personalInfoPG.request_id}
-        />
-      </div>
-    </motion.div>
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={data.personalInfo.no_ktp}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: 20 }}
+        transition={{ duration: 0.2 }}
+        className={styles["data-box"]}
+      >
+        <div className={styles.dashboard}>
+          <h1>Client's Data </h1>
+          <h1>Request ID: {personalInfoPG.app_id.split("I")[0] + "I"}</h1>
+          <h1>Current Form: {mongoAddsData.currentFormDesc} </h1>
+        </div>
+        <hr />
+        <div className={styles.frame}>
+          <PersonalInfoPG data={personalInfoPG} />
+          <SpouseInfoPG data={spouseInfoPG} />
+        </div>
+        <div className={styles.frame}>
+          <SLIKRequestAttemptPG data={slikRequestInfoPG} />
+        </div>
+        <div className={styles.frame}>
+          <GradingResultHistoryPG data={gradingResultHistoryPG} />
+        </div>
+        <div className={styles.frame}>
+          <h2 style={{ marginTop: "0.75rem", marginBottom: "0.75rem" }}>
+            BRMS Personal SLIK Aggregate Result =
+            <span style={{ fontWeight: "lighter", color: "#843636" }}>
+              {" "}
+              {mongoAddsData.aggregateBrms}
+            </span>
+          </h2>
+        </div>
+        <div className={styles.frame}>
+          <HitCBAS
+            maritalStatus={spouseInfoPG.maritalStatus}
+            requestId={personalInfoPG.request_id}
+          />
+        </div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

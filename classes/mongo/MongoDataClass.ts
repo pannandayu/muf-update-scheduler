@@ -12,7 +12,7 @@ class MongoDataClass implements MongoDataInterface {
   current_form_desc: string = "";
   approval_level: number = 0;
   approval_flag: string = "";
-  approval_status: string = "";
+  approval_last_status: string = "";
   approval_surveyor: string = "";
   detail = {
     debitur: {

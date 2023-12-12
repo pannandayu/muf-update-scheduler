@@ -1,7 +1,7 @@
 import MongoDataClass from "@/classes/mongo/MongoDataClass";
 import styles from "@/styles/DataBox.module.css";
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import HeaderMongo from "./HeaderMongo";
 import SubmitterMongo from "./SubmitterMongo";
 import AboutClientMongo from "./AboutClientMongo";
@@ -50,32 +50,36 @@ const DashboardMongo: React.FC<{ data: MongoDataClass }> = ({ data }) => {
   }, [data]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, x: -30 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.3 }}
-      className={styles["data-box"]}
-    >
-      <div className={styles["client-data"]}>
-        <div className={styles.dashboard}>
-          <h1>Client's Data</h1>
-          <h1>{mongoData.current_form_desc}</h1>
-          <h1>Created @ {mongoData.order_created_date}</h1>
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={data.application_id}
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: 20 }}
+        transition={{ duration: 0.2 }}
+        className={styles["data-box"]}
+      >
+        <div className={styles["client-data"]}>
+          <div className={styles.dashboard}>
+            <h1>Client's Data</h1>
+            <h1>{mongoData.current_form_desc}</h1>
+            <h1>Created @ {mongoData.order_created_date}</h1>
+          </div>
+          <hr />
+          <HeaderMongo headerData={mongoData} />
+          <SubmitterMongo submitterData={mongoData} />
+          <AboutClientMongo
+            gradingData={mongoData}
+            personalData={mongoPersonal}
+            spouseData={mongoSpouse}
+            personalAge={personalAge}
+            spouseAge={spouseAge}
+          />
+          <ScoringMongo scoringData={mongoData} mongoPersonal={mongoPersonal} />
+          <ApplicationStatus statusData={mongoData} />
         </div>
-        <hr />
-        <HeaderMongo headerData={mongoData} />
-        <SubmitterMongo submitterData={mongoData} />
-        <AboutClientMongo
-          gradingData={mongoData}
-          personalData={mongoPersonal}
-          spouseData={mongoSpouse}
-          personalAge={personalAge}
-          spouseAge={spouseAge}
-        />
-        <ScoringMongo scoringData={mongoData} mongoPersonal={mongoPersonal} />
-        <ApplicationStatus statusData={mongoData} />
-      </div>
-    </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 
