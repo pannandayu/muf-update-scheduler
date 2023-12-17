@@ -30,7 +30,7 @@ const InputPGSearchByApplicationID: React.FC<{
   const [errorMessage, setErrorMessage] = useState<string | undefined>(
     undefined
   );
-  
+
   const applicationIDRef = useRef<HTMLInputElement>(null);
 
   const applicationIDSubmitHandler: React.FormEventHandler = async (
@@ -142,9 +142,7 @@ const InputPGSearchByApplicationID: React.FC<{
         />
         {
           <p style={{ textAlign: "center" }}>
-            {errorObject?.errorMessage.filter((e) =>
-              e.includes("Application ID")
-            )}
+            {errorObject?.errorMessage.filter((e) => e.includes("14"))}
           </p>
         }
         {errorMessage ? (

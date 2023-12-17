@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Modal from "react-modal";
 
 Modal.setAppElement("#__next");
@@ -8,6 +8,13 @@ const ModalCard: React.FC<{
   onClose: (event: React.MouseEvent | React.KeyboardEvent) => void;
   children?: React.ReactNode;
 }> = ({ isOpen, onClose, children }) => {
+  useEffect(() => {
+    return () => {
+      document.body.removeAttribute("class");
+      document.getElementById("__next")?.removeAttribute("aria-hidden");
+    };
+  }, []);
+
   return (
     <Modal
       isOpen={isOpen}
