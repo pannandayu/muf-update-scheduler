@@ -22,7 +22,7 @@ const NavBar: React.FC = () => {
             <h1 style={{ fontSize: "1.5rem" }}>SLIK Monitoring Dashboard</h1>
           </div>
           <NavItems href="/" title="Search" />
-          <NavItems href="/cbas-statistics" title="CBAS Statistics" />
+          <NavItems href="/cbas" title="CBAS Que" />
           <Link href="https://phabricator.muf.co.id" target="_blank">
             <Image
               width={0}
