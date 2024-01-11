@@ -6,6 +6,7 @@ import CBASPersonalInfo from "@/classes/cbas/CBASPersonalInfo";
 import CBASSpouseInfo from "@/classes/cbas/CBASSpouseInfo";
 import CBASAggregateInfo from "@/classes/cbas/CBASAggregateInfo";
 import Image from "next/image";
+import { fetchWithTimeout } from "@/helper";
 
 const responseStyle = { marginTop: "1rem", color: "#CA5305" };
 const responseDivStyle = { display: "flex", gap: "3.5rem" };
@@ -46,46 +47,94 @@ const HitCBAS: React.FC<{
     let appIdSpouse = requestId + "102";
     try {
       if (maritalStatus === "01") {
-        const cbasPersonalRequest = await fetch("/api/hit-cbas", {
-          body: JSON.stringify({ appId: appIdPersonal, type: "category" }),
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-        });
+        // const cbasPersonalRequest = await fetch("/api/hit-cbas", {
+        //   body: JSON.stringify({ appId: appIdPersonal, type: "category" }),
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        // });
 
+        const cbasPersonalRequest = await fetchWithTimeout<Response>(
+          1000 * 60 * 4,
+          fetch("/api/hit-cbas", {
+            body: JSON.stringify({ appId: appIdPersonal, type: "category" }),
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+          })
+        );
         const cbasPersonalResponse = await cbasPersonalRequest.json();
 
-        const cbasSpouseRequest = await fetch("/api/hit-cbas", {
-          body: JSON.stringify({ appId: appIdSpouse, type: "category" }),
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-        });
+        const cbasSpouseRequest = await fetchWithTimeout<Response>(
+          1000 * 60 * 4,
+          fetch("/api/hit-cbas", {
+            body: JSON.stringify({ appId: appIdSpouse, type: "category" }),
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+          })
+        );
         const cbasSpouseResponse = await cbasSpouseRequest.json();
 
-        const cbasAggregateRequest = await fetch("/api/hit-cbas", {
-          body: JSON.stringify({ requestId, type: "agregat_ind" }),
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-        });
+        const cbasAggregateRequest = await fetchWithTimeout<Response>(
+          1000 * 60 * 4,
+          fetch("/api/hit-cbas", {
+            body: JSON.stringify({ appId: requestId, type: "agregat_ind" }),
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+          })
+        );
         const cbasAggregateResponse = await cbasAggregateRequest.json();
+
+        // const cbasSpouseRequest = await fetch("/api/hit-cbas", {
+        //   body: JSON.stringify({ appId: appIdSpouse, type: "category" }),
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        // });
+        // const cbasSpouseResponse = await cbasSpouseRequest.json();
+
+        // const cbasAggregateRequest = await fetch("/api/hit-cbas", {
+        //   body: JSON.stringify({ requestId, type: "agregat_ind" }),
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        // });
+        // const cbasAggregateResponse = await cbasAggregateRequest.json();
 
         setCbasDataPersonal(cbasPersonalResponse);
         setCbasDataSpouse(cbasSpouseResponse);
         setCbasDataAggregate(cbasAggregateResponse);
       } else {
-        const cbasPersonalRequest = await fetch("/api/hit-cbas", {
-          body: JSON.stringify({ appId: appIdPersonal, type: "category" }),
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-        });
+        // const cbasPersonalRequest = await fetch("/api/hit-cbas", {
+        //   body: JSON.stringify({ appId: appIdPersonal, type: "category" }),
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        // });
+        // const cbasPersonalResponseNotMarried = await cbasPersonalRequest.json();
+
+        // const cbasAggregateRequest = await fetch("/api/hit-cbas", {
+        //   body: JSON.stringify({ requestId, type: "agregat_ind" }),
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        // });
+        // const cbasAggregateResponseNotMarried =
+        //   await cbasAggregateRequest.json();
+
+        const cbasPersonalRequest = await fetchWithTimeout<Response>(
+          1000 * 60 * 4,
+          fetch("/api/hit-cbas", {
+            body: JSON.stringify({ appId: appIdPersonal, type: "category" }),
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+          })
+        );
         const cbasPersonalResponseNotMarried = await cbasPersonalRequest.json();
 
-        const cbasAggregateRequest = await fetch("/api/hit-cbas", {
-          body: JSON.stringify({ requestId, type: "agregat_ind" }),
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-        });
-        const cbasAggregateResponseNotMarried =
-          await cbasAggregateRequest.json();
+        const cbasSpouseRequest = await fetchWithTimeout<Response>(
+          1000 * 60 * 4,
+          fetch("/api/hit-cbas", {
+            body: JSON.stringify({ appId: appIdSpouse, type: "category" }),
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+          })
+        );
+        const cbasAggregateResponseNotMarried = await cbasSpouseRequest.json();
 
         setCbasDataPersonal(cbasPersonalResponseNotMarried);
         setCbasDataAggregate(cbasAggregateResponseNotMarried);
