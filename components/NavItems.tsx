@@ -1,9 +1,9 @@
-import Link from "next/link";
-import React, { Fragment, useEffect, useState } from "react";
 import styles from "@/styles/NavItems.module.css";
-import { useRouter } from "next/router";
 import ModalCard from "@/wrappers/Modal";
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { Fragment, useEffect, useState } from "react";
 
 const NavItems: React.FC<{ title: string; href: string }> = ({
   title,

@@ -1,5 +1,5 @@
-import { Column, useSortBy, useTable } from "react-table";
 import { motion } from "framer-motion";
+import { Column, useSortBy, useTable } from "react-table";
 
 interface ReactTableProps<T extends object> {
   inputData: T[];

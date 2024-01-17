@@ -33,6 +33,23 @@
   gap: 2rem;
 }
 
+.cbas-data {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.cbas-data * {
+  font-family: "Mulish";
+}
+
+.cbas-data h2 {
+  margin-bottom: 0.5rem;
+}
+
+.cbas-data span {
+  font-family: Arial, sans-serif;
+}
+
 .last-request h3 {
   margin-top: 0;
   margin-bottom: 0;

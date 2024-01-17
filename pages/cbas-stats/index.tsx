@@ -1,15 +1,15 @@
 import Input from "@/components/Input";
+import ReactTable from "@/components/ReactTable";
 import AuthContext from "@/context/auth-context";
+import CBASContext from "@/context/cbas-context";
 import CBASAgent from "@/interfaces/cbas/CBASAgent";
 import CBASQue from "@/interfaces/cbas/CBASQue";
+import styles from "@/styles/CBASQue.module.css";
+import inputStyles from "@/styles/Input.module.css";
+import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/router";
 import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
-import inputStyles from "@/styles/Input.module.css";
-import styles from "@/styles/CBASQue.module.css";
-import { AnimatePresence, motion } from "framer-motion";
-import CBASContext from "@/context/cbas-context";
 import { Column } from "react-table";
-import ReactTable from "@/components/ReactTable";
 
 const CBASQueIndex: React.FC<{
   responseQueCbas?: { queueCbas: CBASQue[] };

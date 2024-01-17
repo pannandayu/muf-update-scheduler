@@ -1,7 +1,7 @@
-import { AnimatePresence, motion } from "framer-motion";
-import styles from "@/styles/SearchParameters.module.css";
-import { Fragment, useContext } from "react";
 import DataContext from "@/context/data-context";
+import styles from "@/styles/SearchParameters.module.css";
+import { AnimatePresence, motion } from "framer-motion";
+import { Fragment, useContext } from "react";
 
 const SearchParameters: React.FC<{ form: string }> = ({ form }) => {
   const dataContext = useContext(DataContext);

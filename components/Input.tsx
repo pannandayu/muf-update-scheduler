@@ -1,7 +1,6 @@
-import styles from "@/styles/Input.module.css";
 import InputTagInterface from "@/interfaces/InputTagInterface";
-import { Fragment } from "react";
-import React from "react";
+import styles from "@/styles/Input.module.css";
+import React, { Fragment } from "react";
 
 const Input = React.forwardRef<HTMLInputElement, InputTagInterface>(
   (inputTag: InputTagInterface, ref) => {

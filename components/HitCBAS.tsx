@@ -1,11 +1,11 @@
-import styles from "@/styles/DataBox.module.css";
-import React, { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import CardDataBox from "@/wrappers/CardDataBox";
+import CBASAggregateInfo from "@/classes/cbas/CBASAggregateInfo";
 import CBASPersonalInfo from "@/classes/cbas/CBASPersonalInfo";
 import CBASSpouseInfo from "@/classes/cbas/CBASSpouseInfo";
-import CBASAggregateInfo from "@/classes/cbas/CBASAggregateInfo";
+import styles from "@/styles/DataBox.module.css";
+import CardDataBox from "@/wrappers/CardDataBox";
+import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
+import React, { useEffect, useState } from "react";
 
 const responseStyle = { marginTop: "1rem", color: "#CA5305" };
 const responseDivStyle = { display: "flex", gap: "3.5rem" };
