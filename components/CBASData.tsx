@@ -10,9 +10,6 @@ const CBASData: React.FC<{
     vip_code: string | null;
   };
 }> = ({ status, cbasData }) => {
-
-  
-
   const underline = (
     <div
       style={{
@@ -38,14 +35,6 @@ const CBASData: React.FC<{
         Cust. Name {" -> "} <span>{cbasData.cust_name}</span>
       </h3>
       <h3>
-        Created Date {" -> "}
-        <span>
-          {new Date(cbasData.createdate).toDateString() +
-            " - " +
-            new Date(cbasData.createdate).toLocaleTimeString()}
-        </span>
-      </h3>
-      <h3>
         DoB {" -> "}
         <span>
           {cbasData.dob
@@ -54,7 +43,12 @@ const CBASData: React.FC<{
         </span>
       </h3>
       <h3>
-        Exportsif Date {" -> "} <span>{cbasData.exportsif_date || "NULL"}</span>
+        Creation Date {" -> "}
+        <span>{cbasData.createdate.replace(" ", " @ ")}</span>
+      </h3>
+      <h3>
+        Exportsif Date {" -> "}{" "}
+        <span>{cbasData.exportsif_date?.replace(" ", " @ ") || "NULL"}</span>
       </h3>
       <h3>
         Searching Result {" -> "} <span>{cbasData.searching_result}</span>
