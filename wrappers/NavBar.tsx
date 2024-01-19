@@ -21,7 +21,7 @@ const NavBar: React.FC = () => {
           <div className={styles["sidebar-title"]}>
             <h1 style={{ fontSize: "1.5rem" }}>SLIK Monitoring Dashboard</h1>
           </div>
-          <NavItems href="/" title="Search" />
+          <NavItems href="/" title="MUF Search" />
           <NavItems href="/cbas-search" title="CBAS Search" />
           <NavItems href="/cbas-stats" title="CBAS Statistics" />
           <Link href="https://phabricator.muf.co.id" target="_blank">

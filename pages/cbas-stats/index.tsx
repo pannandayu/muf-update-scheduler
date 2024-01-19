@@ -4,6 +4,7 @@ import AuthContext from "@/context/auth-context";
 import CBASContext from "@/context/cbas-context";
 import CBASAgent from "@/interfaces/cbas/CBASAgent";
 import CBASQue from "@/interfaces/cbas/CBASQue";
+import ICBASNoResponse from "@/interfaces/cbas/ICBASNoResponse";
 import styles from "@/styles/CBASQue.module.css";
 import inputStyles from "@/styles/Input.module.css";
 import { AnimatePresence, motion } from "framer-motion";
@@ -14,8 +15,14 @@ import { Column } from "react-table";
 const CBASQueIndex: React.FC<{
   responseQueCbas?: { queueCbas: CBASQue[] };
   responseAgentCbas?: { agentCbas: CBASAgent[] };
+  responseNoResponseCbas?: { agentNoResp: ICBASNoResponse[] };
   errorMessage?: string;
-}> = ({ responseQueCbas, responseAgentCbas, errorMessage }) => {
+}> = ({
+  responseQueCbas,
+  responseAgentCbas,
+  responseNoResponseCbas,
+  errorMessage,
+}) => {
   const authContext = useContext(AuthContext);
   const cbasContext = useContext(CBASContext);
   const router = useRouter();
@@ -24,7 +31,8 @@ const CBASQueIndex: React.FC<{
   const [prevRefetchInterval, setPrevRefetchInterval] =
     useState<number>(refetchInterval);
   const [isPaused, setIsPaused] = useState<boolean>(false);
-  const [switchTable, setSwitchTable] = useState<boolean>(false);
+  const [tableKey, setTableKey] = useState<string>("que");
+
   const [queCbasData, setQueCbasData] = useState<CBASQue[]>(
     responseQueCbas?.queueCbas || [
       {
@@ -38,6 +46,19 @@ const CBASQueIndex: React.FC<{
   );
   const [agentCbasData, setAgentCbasData] = useState<CBASAgent[]>(
     responseAgentCbas?.agentCbas || [{ ip_address: "", userid: "" }]
+  );
+
+  const [noResponseCbasData, setNoResponseCbasData] = useState<
+    ICBASNoResponse[]
+  >(
+    responseNoResponseCbas?.agentNoResp || [
+      {
+        no_resp_count: "",
+        total_count: "",
+        persentase_no_resp: "",
+        vip_code: "",
+      },
+    ]
   );
 
   const refetchIntervalRef = useRef<HTMLInputElement>(null);
@@ -67,6 +88,7 @@ const CBASQueIndex: React.FC<{
   const getCbasData = async () => {
     let responseQue: { queueCbas: CBASQue[] };
     let responseAgent: { agentCbas: CBASAgent[] };
+    let responseNoResponse: { agentNoResp: ICBASNoResponse[] };
 
     try {
       const requestQueCbas = await fetch("/api/get-que-cbas", {
@@ -80,17 +102,26 @@ const CBASQueIndex: React.FC<{
         headers: { "Content-Type": "application/json" },
       });
 
-      if (requestQueCbas.ok && requestAgentCbas.ok) {
+      const requestNoResponseCbas = await fetch("/api/get-no-response-cbas");
+
+      if (
+        requestQueCbas.ok &&
+        requestAgentCbas.ok &&
+        requestNoResponseCbas.ok
+      ) {
         responseQue = await requestQueCbas.json();
         responseAgent = await requestAgentCbas.json();
+        responseNoResponse = await requestNoResponseCbas.json();
 
         const { queueCbas } = responseQue ?? { queueCbas: [] };
         const { agentCbas } = responseAgent ?? { agentCbas: [] };
+        const { agentNoResp } = responseNoResponse ?? { agentNoResp: [] };
 
         setQueCbasData(queueCbas);
         setAgentCbasData(agentCbas);
+        setNoResponseCbasData(agentNoResp);
       } else {
-        throw Error(
+        throw new Error(
           "Something went wrong when fetch CBAS data. Error from getCbasData"
         );
       }
@@ -144,8 +175,15 @@ const CBASQueIndex: React.FC<{
   const agentCbasDataMemo = useMemo(() => {
     return agentCbasData;
   }, [JSON.stringify(agentCbasData)]);
+  const noResponseCbasDataMemo = useMemo(() => {
+    return noResponseCbasData;
+  }, [JSON.stringify(noResponseCbasData)]);
 
-  const { queCbasTableColumns, agentCbasTableColumns } = createColumns();
+  const {
+    queCbasTableColumns,
+    agentCbasTableColumns,
+    noResponseCbasTableColumns,
+  } = createColumns();
 
   if (!safetyCheckRef.current) return;
 
@@ -187,21 +225,33 @@ const CBASQueIndex: React.FC<{
             </motion.button>
             <AnimatePresence mode="wait">
               <motion.button
-                key={switchTable.toString()}
+                key={tableKey}
                 whileTap={{ scale: 0.8 }}
                 style={{ backgroundColor: "purple" }}
                 className={styles["interval-button"]}
                 type="submit"
-                onClick={() => setSwitchTable((prevState) => !prevState)}
+                onClick={() =>
+                  setTableKey(
+                    tableKey === "que"
+                      ? "agent"
+                      : tableKey === "agent"
+                      ? "no-response"
+                      : "que"
+                  )
+                }
               >
                 <motion.span
-                  key={`span-${switchTable.toString()}`}
+                  key={`span-${tableKey}`}
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.1 }}
                 >
-                  {switchTable ? "List CBAS Que" : "List CBAS Agent"}
+                  {tableKey === "que"
+                    ? "CBAS Agent Table"
+                    : tableKey === "agent"
+                    ? "CBAS No Response Table"
+                    : "CBAS Que Table"}
                 </motion.span>
               </motion.button>
             </AnimatePresence>
@@ -209,7 +259,7 @@ const CBASQueIndex: React.FC<{
         </div>
         <AnimatePresence mode="wait">
           <motion.div
-            key={switchTable.toString()}
+            key={tableKey}
             initial={{ x: -10, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: 10, opacity: 0 }}
@@ -221,23 +271,36 @@ const CBASQueIndex: React.FC<{
               marginTop: "5%",
             }}
           >
-            <h1>{!switchTable ? "CBAS Ques Table" : "CBAS Agent Table"}</h1>
+            <h1>
+              {tableKey === "que"
+                ? "CBAS Ques Table"
+                : tableKey === "agent"
+                ? "CBAS Agent Table"
+                : "CBAS No Response Table"}
+            </h1>
           </motion.div>
         </AnimatePresence>
       </div>
-      {!switchTable ? (
+      {tableKey === "que" ? (
         <ReactTable
           inputData={queCbasDataMemo}
           inputColumns={queCbasTableColumns}
           className={styles["cbas-table"]}
           tableKey={"que"}
         />
-      ) : (
+      ) : tableKey === "agent" ? (
         <ReactTable
           inputData={agentCbasDataMemo}
           inputColumns={agentCbasTableColumns}
           className={styles["cbas-table"]}
           tableKey={"agent"}
+        />
+      ) : (
+        <ReactTable
+          inputData={noResponseCbasDataMemo}
+          inputColumns={noResponseCbasTableColumns}
+          className={styles["cbas-table"]}
+          tableKey={"no-response"}
         />
       )}
     </div>
@@ -274,12 +337,36 @@ const createColumns = () => {
     []
   );
 
-  return { queCbasTableColumns, agentCbasTableColumns };
+  const noResponseCbasTableColumns: Column<ICBASNoResponse>[] = useMemo(
+    () => [
+      { Header: "VIP Code", accessor: "vip_code" as keyof ICBASNoResponse },
+      {
+        Header: "Total Que(s)",
+        accessor: "total_count" as keyof ICBASNoResponse,
+      },
+      {
+        Header: "Total No Response(s)",
+        accessor: "no_resp_count" as keyof ICBASNoResponse,
+      },
+      {
+        Header: "No Response Perc. (%)",
+        accessor: "persentase_no_resp" as keyof ICBASNoResponse,
+      },
+    ],
+    []
+  );
+
+  return {
+    queCbasTableColumns,
+    agentCbasTableColumns,
+    noResponseCbasTableColumns,
+  };
 };
 
 export async function getServerSideProps() {
   let responseQueCbas;
   let responseAgentCbas;
+  let responseNoResponseCbas;
   let errorMessage;
 
   try {
@@ -294,14 +381,20 @@ export async function getServerSideProps() {
       headers: { "Content-Type": "application/json" },
     });
 
-    if (requestQueCbas.ok && requestAgentCbas.ok) {
+    const requestNoResponseCbas = await fetch(
+      `${process.env.JAVA_CBAS_NO_RESPONSE}`
+    );
+
+    if (requestQueCbas.ok && requestAgentCbas.ok && requestNoResponseCbas.ok) {
       errorMessage = null;
       responseQueCbas = await requestQueCbas.json();
       responseAgentCbas = await requestAgentCbas.json();
+      responseNoResponseCbas = await requestNoResponseCbas.json();
     } else {
       errorMessage = "Please connect to the VPN.";
       responseQueCbas = null;
       responseAgentCbas = null;
+      responseNoResponseCbas = null;
     }
   } catch (error: any) {
     console.error(error);
@@ -311,6 +404,7 @@ export async function getServerSideProps() {
     props: {
       responseQueCbas,
       responseAgentCbas,
+      responseNoResponseCbas,
       errorMessage,
     },
   };
