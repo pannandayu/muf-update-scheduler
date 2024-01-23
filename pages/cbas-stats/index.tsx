@@ -27,7 +27,7 @@ const CBASQueIndex: React.FC<{
   const cbasContext = useContext(CBASContext);
   const router = useRouter();
   const [fetchTime, setFetchTime] = useState<Date>();
-  const [refetchInterval, setRefetchInterval] = useState<number>(60);
+  const [refetchInterval, setRefetchInterval] = useState<number>(60 * 5);
   const [prevRefetchInterval, setPrevRefetchInterval] =
     useState<number>(refetchInterval);
   const [isPaused, setIsPaused] = useState<boolean>(false);
