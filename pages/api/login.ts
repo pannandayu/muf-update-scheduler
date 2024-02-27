@@ -1,11 +1,5 @@
+import { LoginDataReturn } from "../../types/Login";
 import { NextApiRequest, NextApiResponse } from "next";
-
-type ReturnData = {
-  message: string;
-  username?: string;
-  role?: string;
-  token?: string;
-};
 
 const loginHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
@@ -15,11 +9,7 @@ const loginHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       headers: { "Content-Type": "application/json" },
     });
 
-    const result: ReturnData = await response.json();
-
-    if (response.status === 500) {
-      throw new Error("Error when login");
-    }
+    const result: LoginDataReturn = await response.json();
 
     if (response.status !== 200) {
       return res.status(response.status).json({ message: result.message });

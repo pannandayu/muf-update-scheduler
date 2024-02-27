@@ -1,22 +1,15 @@
-import Box from "@/wrappers/Box";
 import styles from "@/styles/Index.module.css";
-import { FormEventHandler, Fragment, useRef, useState } from "react";
 import loginValidationSchema from "@/validations/LoginValidation";
+import { FormEventHandler, Fragment, useRef, useState } from "react";
 import { ZodError } from "zod";
-import { useDispatch } from "react-redux";
-import { authSliceActions } from "@/store/store";
+
+import { useAppDispatch } from "@/redux/hooks";
+import { loginThunk } from "@/redux/thunks";
 import Router from "next/router";
 
 type LoginData = {
   username: string;
   password: string;
-};
-
-type ReturnData = {
-  message: string;
-  username?: string;
-  role?: string;
-  token?: string;
 };
 
 const Index: React.FC = () => {
@@ -26,7 +19,7 @@ const Index: React.FC = () => {
   const [validationError, setValidationError] = useState<ZodError>();
   const [authError, setAuthError] = useState<string>();
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const loginHandler: FormEventHandler = (event) => {
     event.preventDefault();
@@ -44,36 +37,17 @@ const Index: React.FC = () => {
       setValidationError(validationResult.error);
       return;
     }
+
     proceedLogin(loginData);
   };
 
-  const proceedLogin = async (data: LoginData) => {
-    setValidationError(undefined);
-    setAuthError(undefined);
-
-    const response = await fetch("/api/login", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    const result: ReturnData = await response.json();
-
-    if (response.status !== 200) {
-      setAuthError(result.message);
-      return;
+  const proceedLogin = async (loginData: LoginData) => {
+    try {
+      await dispatch(loginThunk(loginData)).unwrap();
+      Router.push("/home");
+    } catch (err: any) {
+      setAuthError(err.message);
     }
-
-    dispatch(
-      authSliceActions.setUser({
-        username: result.username,
-        role: result.role,
-        token: result.token,
-      })
-    );
-    Router.push("/home");
   };
 
   return (
@@ -101,7 +75,7 @@ const Index: React.FC = () => {
         validationError.errors.map((el) => {
           return (
             <Fragment>
-              <p style={{ color: "red" }}>
+              <p key={el.path[0]} style={{ color: "red" }}>
                 {el.path + el.message.replace("String", "")}
               </p>
             </Fragment>

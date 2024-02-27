@@ -7,10 +7,6 @@ const monitorHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       headers: { Authorization: req.headers.authorization || "" },
     });
 
-    if (response.status === 500) {
-      throw new Error("Error when accessing monitoring dashboard");
-    }
-
     const result = await response.json();
 
     res.status(response.status).json({ message: result.message });

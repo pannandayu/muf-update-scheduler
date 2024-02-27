@@ -1,35 +1,73 @@
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { accessThunk, pushUpdateThunk } from "@/redux/thunks";
 import Router from "next/router";
-import { useEffect, useRef } from "react";
-import { useSelector } from "react-redux";
-
-type AuthStatus = {
-  message: string;
-};
+import {
+  FormEvent,
+  FormEventHandler,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import styles from "@/styles/Home.module.css";
 
 const Home: React.FC = () => {
-  const authData = useSelector((state: any) => state.auth);
+  const authSelector = useAppSelector((state) => state.auth);
+  const dispatch = useAppDispatch();
+
+  const [error, setError] = useState<string>();
+
+  const keyRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const accessCheck = async () => {
       try {
-        const response = await fetch("/api/monitor", {
-          method: "GET",
-          headers: { Authorization: "Bearer: " + authData.token },
-        });
-
-        if (response.status !== 200) {
-          return Router.push("/");
-        }
-      } catch (err: any) {}
+        await dispatch(accessThunk(authSelector.token)).unwrap();
+      } catch (err: any) {
+        Router.push("/");
+      }
     };
 
-    fetchData();
+    accessCheck();
   }, []);
 
+  const pushUpdateHandler: FormEventHandler = (event: FormEvent) => {
+    event.preventDefault();
+    setError(undefined);
+    try {
+      const key = { key: keyRef.current?.value.trim() || "" };
+
+      if (key.key === "") {
+        throw new Error("Key is empty");
+      }
+
+      proceedUpdate(key);
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
+  const proceedUpdate = async (key: { key: string }) => {
+    try {
+      await dispatch(pushUpdateThunk(key)).unwrap();
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
   return (
-    <div>
-      <h1>Welcome {authData.username}</h1>
-      <p>Reloading means login</p>
+    <div className={styles.home}>
+      <div className={styles["home-title"]}>
+        <h1>Welcome {authSelector.username}.</h1>
+        <p>Refresh means login</p>
+      </div>
+      <div className={styles["home-push-button"]}>
+        <form onSubmit={pushUpdateHandler}>
+          <label htmlFor="key">Key</label>
+          <input type="password" id="key" name="key" ref={keyRef} />
+          <p style={{ color: "red" }}>{error}</p>
+          <button type="submit">Push Update</button>
+        </form>
+      </div>
     </div>
   );
 };
