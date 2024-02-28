@@ -3,14 +3,10 @@ import loginValidationSchema from "@/validations/LoginValidation";
 import { FormEventHandler, Fragment, useRef, useState } from "react";
 import { ZodError } from "zod";
 
+import { LoginDataInput } from "@/interfaces/IAuth";
 import { useAppDispatch } from "@/redux/hooks";
 import { loginThunk } from "@/redux/thunks";
 import Router from "next/router";
-
-type LoginData = {
-  username: string;
-  password: string;
-};
 
 const Index: React.FC = () => {
   const usernameRef = useRef<HTMLInputElement>(null);
@@ -26,7 +22,7 @@ const Index: React.FC = () => {
     setValidationError(undefined);
     setAuthError(undefined);
 
-    const loginData: LoginData = {
+    const loginData: LoginDataInput = {
       username: usernameRef.current!.value,
       password: passwordRef.current!.value,
     };
@@ -38,10 +34,10 @@ const Index: React.FC = () => {
       return;
     }
 
-    proceedLogin(loginData);
+    proceedLogin(validationResult.data);
   };
 
-  const proceedLogin = async (loginData: LoginData) => {
+  const proceedLogin = async (loginData: LoginDataInput) => {
     try {
       await dispatch(loginThunk(loginData)).unwrap();
       Router.push("/home");
@@ -51,7 +47,7 @@ const Index: React.FC = () => {
   };
 
   return (
-    <div className={styles.login}>
+    <div className={styles.display}>
       <h1>Update Scheduler Monitoring</h1>
       <div>
         <form className={styles.form} method="POST" onSubmit={loginHandler}>
@@ -67,6 +63,16 @@ const Index: React.FC = () => {
           />
           <br />
           <button type="submit">Login</button>
+          <br />
+          <button
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              Router.push("/signup");
+            }}
+          >
+            Signup
+          </button>
         </form>
       </div>
       <br />

@@ -1,28 +1,37 @@
-import { accessThunk, loginThunk } from "@/redux/thunks";
+import {  loginThunk, signupThunk } from "@/redux/thunks";
 import { createSlice } from "@reduxjs/toolkit";
 
 export const authSlice = createSlice({
   name: "authentication",
   initialState: {
-    message: "",
-    username: "",
-    role: "",
-    token: "",
+    login: {
+      message: "",
+      username: "",
+      role: "",
+      token: "",
+    },
+    signup: {
+      message: "",
+    },
   },
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(loginThunk.fulfilled, (state, action) => {
       const { message, username, role, token } = action.payload;
-      state.message = message;
-      state.username = username!;
-      state.role = role!;
-      state.token = token!;
+      state.login.message = message;
+      state.login.username = username!;
+      state.login.role = role!;
+      state.login.token = token!;
     });
+    builder.addCase(signupThunk.fulfilled, (state, action) => {
+      state.signup.message = action.payload.message;
+    });
+
     builder.addCase(loginThunk.rejected, (state, action) => {
-      state.message = action.error.message || "Login rejected";
+      state.login.message = action.error.message || "Login rejected";
     });
-    builder.addCase(accessThunk.rejected, (state, action) => {
-      state.message = action.error.message || "Access rejected";
+    builder.addCase(signupThunk.rejected, (state, action) => {
+      state.signup.message = action.error.message || "Signup rejected";
     });
   },
 });

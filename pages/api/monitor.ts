@@ -1,3 +1,4 @@
+import { UpdateDataRecord } from "@/interfaces/IMonitor";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const monitorHandler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -7,9 +8,15 @@ const monitorHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       headers: { Authorization: req.headers.authorization || "" },
     });
 
-    const result = await response.json();
+    const result: UpdateDataRecord = await response.json();
 
-    res.status(response.status).json({ message: result.message });
+    if (response.status !== 200) {
+      res.status(response.status).json({ message: result.message });
+    }
+
+    res.status(response.status).json({
+      record: result.record,
+    });
   } catch (err: any) {
     res.status(500).json({ message: err.message });
   }

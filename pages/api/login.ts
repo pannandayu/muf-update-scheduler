@@ -1,4 +1,4 @@
-import { LoginDataReturn } from "../../types/Login";
+import { LoginDataReturn } from "../../interfaces/IAuth";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const loginHandler = async (req: NextApiRequest, res: NextApiResponse) => {

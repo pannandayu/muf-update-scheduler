@@ -1,4 +1,4 @@
-import { PushUpdateDataReturn } from "./../../types/Monitor";
+import { PushUpdateDataReturn } from "../../interfaces/IMonitor";
 import { NextApiRequest, NextApiResponse } from "next";
 
 const pushUpdateHandler = async (req: NextApiRequest, res: NextApiResponse) => {
@@ -14,26 +14,11 @@ const pushUpdateHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     const result: PushUpdateDataReturn = await response.json();
 
     if (response.status !== 200) {
-      return res.status(response.status).json({
-        error: {
-          message: result.error?.message || "Error while pushing update",
-        },
-      });
+      return res.status(response.status).json({ message: result.message });
     }
 
     res.status(response.status).json({
-      current: {
-        data: {
-          message: result.current.data.message,
-          currentData: result.current.data.currentData,
-          dateTime: result.current.data.dateTime,
-          size: result.current.data.size,
-        },
-      },
-      record: {
-        data: result.record.data,
-        size: result.record.size,
-      },
+      current: result.current,
     });
   } catch (err: any) {
     res.status(500).json({ error: { message: err.message } });
