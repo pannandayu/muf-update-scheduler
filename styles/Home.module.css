@@ -47,3 +47,10 @@
 .home-push-button button:active {
   scale: 0.9;
 }
+
+.data-container {
+  font-family: "Lato";
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}

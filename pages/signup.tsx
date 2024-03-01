@@ -81,10 +81,10 @@ const Signup: React.FC = () => {
       </div>
       {<p style={{ color: "red" }}>{authError}</p>}
       {validationError &&
-        validationError.errors.map((el) => {
+        validationError.errors.map((el, index) => {
           return (
-            <Fragment>
-              <p key={el.path[0]} style={{ color: "red" }}>
+            <Fragment key={index}>
+              <p style={{ color: "red" }}>
                 {el.path + el.message.replace("String", "")}
               </p>
             </Fragment>

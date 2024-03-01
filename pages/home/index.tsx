@@ -11,6 +11,9 @@ import {
 import styles from "@/styles/Home.module.css";
 import { ThunkData } from "@/interfaces/IThunk";
 import { UpdateDataRecord } from "@/interfaces/IMonitor";
+import Table from "@/components/Table/Table";
+import TableRow from "@/components/Table/TableRow";
+import Status from "@/wrappers/Status";
 
 const Home: React.FC = () => {
   const loginSelector = useAppSelector((state) => state.auth.login);
@@ -45,7 +48,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     fetchData();
-  }, [dispatch, loginSelector.token]);
+  }, []);
 
   const pushUpdateHandler: FormEventHandler = (event: FormEvent) => {
     event.preventDefault();
@@ -67,7 +70,7 @@ const Home: React.FC = () => {
 
   const proceedUpdate = async (key: { updateKey: string }) => {
     try {
-      await dispatch(pushUpdateThunk(key));
+      await dispatch(pushUpdateThunk(key)).unwrap();
       await fetchData();
 
       setNoUpdate(undefined);
@@ -87,19 +90,45 @@ const Home: React.FC = () => {
           <div className={styles["home-push-button"]}>
             <form onSubmit={pushUpdateHandler}>
               <label htmlFor="key">Key</label>
-              <input type="password" id="key" name="key" ref={keyRef} />
+              <input
+                type="password"
+                id="key"
+                name="key"
+                ref={keyRef}
+                placeholder="Push update manually"
+              />
               <p style={{ color: "red" }}>{error}</p>
               <button type="submit">Push Update</button>
             </form>
           </div>
+
+          <Status>
+            <p>Total update(s) (batch)</p>
+            <p>{dataSelector.record.data.length}</p>
+          </Status>
+          <Status>
+            <p>Latest update</p>
+            <p>
+              {
+                dataSelector.record.data[dataSelector.record.data.length - 1]
+                  ?.dateTime
+              }
+            </p>
+          </Status>
         </div>
         <div>
           <h1>{new Date().toDateString()}</h1>
           <h2>Today's Update</h2>
           {noUpdate && <h3>{noUpdate}</h3>}
-          <h3>
-            {/* {JSON.stringify(dataSelector.record.data.map(el => el))} TODO */}
-          </h3>
+
+          <div className={styles["data-container"]}>
+            <Table
+              data={dataSelector.record.data}
+              dataKeyFn={(recordData) => recordData.app_id}
+            >
+              {(recordData) => <TableRow props={recordData} />}
+            </Table>
+          </div>
         </div>
       </div>
     </div>

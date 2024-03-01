@@ -5,7 +5,9 @@ const monitorHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const response = await fetch(`${process.env.MONITOR_NODE}`, {
       method: req.method,
-      headers: { Authorization: req.headers.authorization || "" },
+      headers: {
+        Authorization: req.headers.authorization || "",
+      },
     });
 
     const result: UpdateDataRecord = await response.json();

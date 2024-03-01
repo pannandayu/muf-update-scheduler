@@ -1,4 +1,4 @@
-import { UpdateDataRecord } from '@/interfaces/IMonitor';
+import { UpdateDataRecord } from "@/interfaces/IMonitor";
 import { SignupDataInput } from "@/interfaces/IAuth";
 import { PushUpdateDataReturn } from "../interfaces/IMonitor";
 import { createAsyncThunk } from "@reduxjs/toolkit";
@@ -56,7 +56,9 @@ const signupThunk = createAsyncThunk(
 const monitorThunk = createAsyncThunk("data/monitor", async (token: string) => {
   const response = await fetch("/api/monitor", {
     method: "GET",
-    headers: { Authorization: "Bearer: " + token },
+    headers: {
+      Authorization: "Bearer: " + token,
+    },
   });
 
   const result: UpdateDataRecord = await response.json();
