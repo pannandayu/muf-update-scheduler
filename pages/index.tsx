@@ -2,11 +2,10 @@ import styles from "@/styles/Index.module.css";
 import loginValidationSchema from "@/validations/LoginValidation";
 import { FormEventHandler, Fragment, useRef, useState } from "react";
 import { ZodError } from "zod";
-
 import { LoginDataInput } from "@/interfaces/IAuth";
 import { useAppDispatch } from "@/redux/hooks";
 import { loginThunk } from "@/redux/thunks";
-import Router from "next/router";
+import { useRouter } from "next/router";
 
 const Index: React.FC = () => {
   const usernameRef = useRef<HTMLInputElement>(null);
@@ -16,6 +15,8 @@ const Index: React.FC = () => {
   const [authError, setAuthError] = useState<string>();
 
   const dispatch = useAppDispatch();
+
+  const router = useRouter();
 
   const loginHandler: FormEventHandler = (event) => {
     event.preventDefault();
@@ -40,7 +41,7 @@ const Index: React.FC = () => {
   const proceedLogin = async (loginData: LoginDataInput) => {
     try {
       await dispatch(loginThunk(loginData)).unwrap();
-      Router.push("/home");
+      router.push("/home");
     } catch (err: any) {
       setAuthError(err.message);
     }
@@ -68,7 +69,7 @@ const Index: React.FC = () => {
             type="button"
             onClick={(e) => {
               e.preventDefault();
-              Router.push("/signup");
+              router.push("/signup");
             }}
           >
             Signup
@@ -90,4 +91,5 @@ const Index: React.FC = () => {
     </div>
   );
 };
+
 export default Index;

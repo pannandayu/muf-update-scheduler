@@ -26,4 +26,9 @@ interface UpdateDataProps {
   app_id: string;
 }
 
-export type { PushUpdateDataReturn, UpdateDataRecord, UpdateDataProps };
+export type {
+  PushUpdateDataReturn,
+  UpdateDataRecord,
+  UpdateDataCurrent,
+  UpdateDataProps,
+};

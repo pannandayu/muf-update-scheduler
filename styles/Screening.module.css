@@ -1,0 +1,56 @@
+.screening {
+  padding: 1rem 1rem 1rem 3rem;
+}
+
+.screening-title {
+  text-align: left;
+}
+
+.screening-push-button {
+  display: flex;
+  justify-content: left;
+}
+
+.screening-push-button button {
+  padding: 20px 40px;
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  background: linear-gradient(to right, #4caf50, #008cba);
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin: 1rem auto;
+}
+
+.screening-push-button form {
+  display: flex;
+  flex-direction: column;
+}
+
+.screening-push-button input {
+  padding: 10px 15px;
+  font-size: 16px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  outline: none;
+}
+
+.screening-push-button button:hover {
+  scale: 1.1;
+  transition: 0.2s ease-in-out;
+}
+
+.screening-push-button button:active {
+  scale: 0.9;
+}
+
+.data-container {
+  font-family: "Lato";
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+}

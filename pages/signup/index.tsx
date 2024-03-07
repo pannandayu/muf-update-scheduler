@@ -3,7 +3,7 @@ import { useAppDispatch } from "@/redux/hooks";
 import { signupThunk } from "@/redux/thunks";
 import styles from "@/styles/Index.module.css";
 import signupValidationSchema from "@/validations/SignupValidation";
-import Router from "next/router";
+import { useRouter } from "next/router";
 import { FormEventHandler, Fragment, useRef, useState } from "react";
 import { ZodError } from "zod";
 
@@ -11,6 +11,8 @@ const Signup: React.FC = () => {
   const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const keyRef = useRef<HTMLInputElement>(null);
+
+  const router = useRouter();
 
   const dispatch = useAppDispatch();
 
@@ -39,7 +41,7 @@ const Signup: React.FC = () => {
   const proceedSignup = async (signupData: SignupDataInput) => {
     try {
       await dispatch(signupThunk(signupData)).unwrap();
-      Router.push("/");
+      router.push("/");
     } catch (err: any) {
       setAuthError(err.message);
     }
@@ -72,7 +74,7 @@ const Signup: React.FC = () => {
             type="button"
             onClick={(e) => {
               e.preventDefault();
-              Router.push("/");
+              router.push("/");
             }}
           >
             Back to Login Page

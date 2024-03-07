@@ -1,134 +1,72 @@
-import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { monitorThunk, pushUpdateThunk } from "@/redux/thunks";
-import Router from "next/router";
-import {
-  FormEvent,
-  FormEventHandler,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useAppSelector } from "@/redux/hooks";
 import styles from "@/styles/Home.module.css";
-import { ThunkData } from "@/interfaces/IThunk";
-import { UpdateDataRecord } from "@/interfaces/IMonitor";
-import Table from "@/components/Table/Table";
-import TableRow from "@/components/Table/TableRow";
-import Status from "@/wrappers/Status";
+import moment from "moment";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 const Home: React.FC = () => {
   const loginSelector = useAppSelector((state) => state.auth.login);
-  const dataSelector = useAppSelector((state) => state.data);
-  const dispatch = useAppDispatch();
+  const router = useRouter();
 
-  const [error, setError] = useState<string>();
-  const [noUpdate, setNoUpdate] = useState<string>();
+  const date = moment(Date.now()).format("DD-MM-YYYY");
+  const day = date.split("-")[0];
+  const month = date.split("-")[1];
 
-  const keyRef = useRef<HTMLInputElement>(null);
+  const [fyi, setFyi] = useState<string>();
 
-  const fetchData = async () => {
-    try {
-      const response = (await dispatch(
-        monitorThunk(loginSelector.token)
-      )) as ThunkData<UpdateDataRecord["record"], string>;
-
-      if (response.error) {
-        if (
-          response.meta.arg === "" ||
-          !response.error.message.endsWith("yet")
-        ) {
-          return Router.push("/");
-        } else {
-          setNoUpdate(response.error.message);
-        }
-      }
-    } catch (err: any) {
-      console.error(err);
-    }
-  };
+  const fetchFyi = async () =>
+    fetch(`http://numbersapi.com/${month}/${day}/date`)
+      .then((data) => {
+        return data.text();
+      })
+      .then((text) => setFyi(text))
+      .catch((err) => console.error(err));
 
   useEffect(() => {
-    fetchData();
+    if (loginSelector.token === "") {
+      router.push("/");
+    }
   }, []);
 
-  const pushUpdateHandler: FormEventHandler = (event: FormEvent) => {
-    event.preventDefault();
-    setError(undefined);
-    try {
-      const key = { updateKey: keyRef.current?.value.trim() || "" };
-
-      if (key.updateKey === "") {
-        throw new Error("Key is empty");
-      }
-
-      keyRef.current!.value = "";
-
-      proceedUpdate(key);
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
-
-  const proceedUpdate = async (key: { updateKey: string }) => {
-    try {
-      await dispatch(pushUpdateThunk(key)).unwrap();
-      await fetchData();
-
-      setNoUpdate(undefined);
-    } catch (err: any) {
-      setError(err.message);
-    }
-  };
+  useEffect(() => {
+    fetchFyi();
+  }, []);
 
   return (
     <div className={styles.home}>
-      <div style={{ display: "flex", gap: "5rem" }}>
-        <div>
+      <div style={{ display: "flex", gap: "auto" }}>
+        <div style={{ maxWidth: "40%" }}>
           <div className={styles["home-title"]}>
             <h1>Welcome {loginSelector.username}.</h1>
-            <p>Refresh means login</p>
-          </div>
-          <div className={styles["home-push-button"]}>
-            <form onSubmit={pushUpdateHandler}>
-              <label htmlFor="key">Key</label>
-              <input
-                type="password"
-                id="key"
-                name="key"
-                ref={keyRef}
-                placeholder="Push update manually"
-              />
-              <p style={{ color: "red" }}>{error}</p>
-              <button type="submit">Push Update</button>
-            </form>
-          </div>
-
-          <Status>
-            <p>Total update(s) (batch)</p>
-            <p>{dataSelector.record.data.length}</p>
-          </Status>
-          <Status>
-            <p>Latest update</p>
+            <p>This is a monitoring/dashboard app for SLIK update scheduler.</p>
+            <p>Made with React - Next.js, TypeScript, and Love.</p>
             <p>
-              {
-                dataSelector.record.data[dataSelector.record.data.length - 1]
-                  ?.dateTime
-              }
+              Feel free to modify things in here{" "}
+              {"(as long as it doesn't disrupt the functionality)."}
             </p>
-          </Status>
-        </div>
-        <div>
-          <h1>{new Date().toDateString()}</h1>
-          <h2>Today's Update</h2>
-          {noUpdate && <h3>{noUpdate}</h3>}
-
-          <div className={styles["data-container"]}>
-            <Table
-              data={dataSelector.record.data}
-              dataKeyFn={(recordData) => recordData.app_id}
-            >
-              {(recordData) => <TableRow props={recordData} />}
-            </Table>
           </div>
+          <div>
+            <h1 style={{ fontFamily: "Montserrat" }}>
+              Today's Interesting Fact
+            </h1>
+            <p>{fyi}</p>
+            <button type="button" onClick={async () => fetchFyi()}>
+              Tell me more!
+            </button>
+          </div>
+        </div>
+        <div className={styles["screening-picker"]}>
+          <h1>Pick a screening stage</h1>
+          <Link href={"/screening/1"}>
+            <h3>Screening 1</h3>
+          </Link>
+          <Link href={"/screening/2"}>
+            <h3>Screening 2</h3>
+          </Link>
+          <Link href={"/screening/3"}>
+            <h3>Screening 3</h3>
+          </Link>
         </div>
       </div>
     </div>

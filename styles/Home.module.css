@@ -1,56 +1,27 @@
-.home {
-  padding: 1rem 1rem 1rem 3rem;
-}
-
-.home-title {
-  text-align: left;
-}
-
-.home-push-button button {
-  padding: 20px 40px;
-  font-size: 18px;
-  font-weight: bold;
-  text-transform: uppercase;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  background: linear-gradient(to right, #4caf50, #008cba);
-  color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.home-push-button form {
+.screening-picker {
   display: flex;
   flex-direction: column;
-}
-
-.home-push-button input {
-  padding: 10px 15px;
-  font-size: 16px;
-  border: 2px solid #ccc;
+  text-align: center;
+  margin: 10% auto;
+  font-size: 1.5rem;
+  background-color: rgb(244, 244, 244);
   border-radius: 10px;
-  outline: none;
+  padding: 3rem;
 }
 
-.home-push-button {
-  display: flex;
-  justify-content: left;
-  margin-top: 3rem;
+.screening-picker a {
+  text-decoration: none;
+  color: black;
 }
 
-.home-push-button button:hover {
+.screening-picker a:hover {
+  cursor: pointer;
   scale: 1.1;
   transition: 0.2s ease-in-out;
 }
 
-.home-push-button button:active {
+.screening-picker a:active {
+  cursor: pointer;
   scale: 0.9;
-}
-
-.data-container {
-  font-family: "Lato";
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
+  transition: 0.2s ease-in-out;
 }

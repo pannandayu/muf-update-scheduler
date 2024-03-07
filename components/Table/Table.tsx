@@ -1,22 +1,25 @@
 import { UpdateDataProps, UpdateDataRecord } from "@/interfaces/IMonitor";
 import styles from "@/styles/Table.module.css";
-import Router from "next/router";
-import React, { ReactElement } from "react";
+import { useRouter } from "next/router";
+import React, { Fragment, ReactElement } from "react";
 
 const Table: React.FC<{
   data: UpdateDataRecord["record"]["data"];
   children: (recordData: UpdateDataProps) => ReactElement;
   dataKeyFn: (recordData: UpdateDataProps) => string;
-}> = ({ children, data, dataKeyFn }) => {
+  full?: boolean;
+}> = ({ children, data, dataKeyFn, full }) => {
+  const router = useRouter();
+
   const showDataHandler = (dateTime: string) => {
-    Router.push(`${Router.pathname}/${dateTime}`);
+    router.push(`${router.asPath}/batch/${dateTime}`);
   };
 
   return data.map((el, index) => {
     return (
       <div key={el.dateTime} className={styles["table-box"]}>
         <h3
-          style={{ cursor: "pointer" }}
+          style={{ cursor: "pointer", fontFamily: "Montserrat" }}
           onClick={() => showDataHandler(el.dateTime)}
         >
           Batch {index + 1} -{" "}
@@ -33,17 +36,29 @@ const Table: React.FC<{
             </tr>
           </thead>
           <tbody>
-            {el.list.map(
-              (recordData, index) =>
-                index < 3 && (
+            {full ? (
+              <Fragment>
+                {el.list.map((recordData, index) => (
                   <tr key={dataKeyFn(recordData)}>{children(recordData)}</tr>
-                )
+                ))}
+              </Fragment>
+            ) : (
+              <Fragment>
+                {el.list.map(
+                  (recordData, index) =>
+                    index < 3 && (
+                      <tr key={dataKeyFn(recordData)}>
+                        {children(recordData)}
+                      </tr>
+                    )
+                )}
+                <tr>
+                  <td>...</td>
+                  <td>...</td>
+                  <td>...</td>
+                </tr>
+              </Fragment>
             )}
-            <tr>
-              <td>...</td>
-              <td>...</td>
-              <td>...</td>
-            </tr>
           </tbody>
         </table>
       </div>

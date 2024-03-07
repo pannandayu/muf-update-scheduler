@@ -1,7 +1,10 @@
-import { monitorThunk } from "@/redux/thunks";
-import { createSlice } from "@reduxjs/toolkit";
-import { pushUpdateThunk } from "../thunks";
 import { PushUpdateDataReturn, UpdateDataRecord } from "@/interfaces/IMonitor";
+import {
+  getBatchDataThunk,
+  monitorThunk,
+  pushUpdateThunk,
+} from "@/redux/thunks";
+import { createSlice } from "@reduxjs/toolkit";
 
 export const dataSlice = createSlice({
   name: "data",
@@ -30,6 +33,9 @@ export const dataSlice = createSlice({
     builder.addCase(monitorThunk.fulfilled, (state, action) => {
       state.record = action.payload.record;
     });
+    builder.addCase(getBatchDataThunk.fulfilled, (state, action) => {
+      state.current.data = action.payload.data!;
+    });
 
     builder.addCase(monitorThunk.rejected, (state, action) => {
       state.error.message =
@@ -37,6 +43,11 @@ export const dataSlice = createSlice({
     });
     builder.addCase(pushUpdateThunk.rejected, (state, action) => {
       state.error.message = action.error.message || "Pushing update rejected";
+    });
+
+    builder.addCase(getBatchDataThunk.rejected, (state, action) => {
+      state.error.message =
+        action.error.message || "Get batch update data rejected";
     });
   },
 });
