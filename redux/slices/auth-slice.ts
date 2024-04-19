@@ -1,4 +1,4 @@
-import {  loginThunk, signupThunk } from "@/redux/thunks";
+import { loginThunk, signupThunk } from "@/redux/thunks";
 import { createSlice } from "@reduxjs/toolkit";
 
 export const authSlice = createSlice({

@@ -1,0 +1,76 @@
+.param-box {
+  border: 1px solid black;
+  min-width: 15%;
+  max-height: 440px;
+  border-radius: 10px;
+  padding: 1rem;
+}
+
+.param-box form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.button {
+  display: inline-block;
+  padding: 10px 5px 10px 5px;
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #000;
+  border-radius: 5px;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.button:hover {
+  background-color: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+.data-box {
+  display: inline-block;
+  padding: 0 2rem 2rem 2rem;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.data-box h3 {
+  font-family: "Lato";
+}
+.data-box h2 {
+  font-family: "Lato";
+}
+
+
+
+.table table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 10px;
+}
+
+
+.table th {
+  background-color: #f2f2f2;
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  text-align: center;
+}
+
+
+.table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+
+.table td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}

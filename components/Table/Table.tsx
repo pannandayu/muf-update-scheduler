@@ -1,69 +1,50 @@
-import { UpdateDataProps, UpdateDataRecord } from "@/interfaces/IMonitor";
+import { LogData } from "@/interfaces/IMonitor";
 import styles from "@/styles/Table.module.css";
+import { motion } from "framer-motion";
 import { useRouter } from "next/router";
-import React, { Fragment, ReactElement } from "react";
 
 const Table: React.FC<{
-  data: UpdateDataRecord["record"]["data"];
-  children: (recordData: UpdateDataProps) => ReactElement;
-  dataKeyFn: (recordData: UpdateDataProps) => string;
-  full?: boolean;
-}> = ({ children, data, dataKeyFn, full }) => {
+  data: { logs: LogData[] };
+}> = ({ data }) => {
   const router = useRouter();
 
-  const showDataHandler = (dateTime: string) => {
-    router.push(`${router.asPath}/batch/${dateTime}`);
+  const handleGetSingleBatch = (
+    batch: number,
+    date: string,
+    category?: string
+  ) => {
+    router.push(
+      `${router.asPath}/update-info?batch=${batch}&date=${date}${
+        category ? `&category=${category}` : ""
+      }`
+    );
   };
 
-  return data.map((el, index) => {
-    return (
-      <div key={el.dateTime} className={styles["table-box"]}>
-        <h3
-          style={{ cursor: "pointer", fontFamily: "Montserrat" }}
-          onClick={() => showDataHandler(el.dateTime)}
-        >
-          Batch {index + 1} -{" "}
-          {el.dateTime.split(" ")[el.dateTime.split(" ").length - 1]}
-          {" - "}
-          Data count: {el.size}
-        </h3>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Request ID</th>
-              <th>App ID</th>
-              <th>Application No</th>
-            </tr>
-          </thead>
-          <tbody>
-            {full ? (
-              <Fragment>
-                {el.list.map((recordData, index) => (
-                  <tr key={dataKeyFn(recordData)}>{children(recordData)}</tr>
-                ))}
-              </Fragment>
-            ) : (
-              <Fragment>
-                {el.list.map(
-                  (recordData, index) =>
-                    index < 3 && (
-                      <tr key={dataKeyFn(recordData)}>
-                        {children(recordData)}
-                      </tr>
-                    )
-                )}
-                <tr>
-                  <td>...</td>
-                  <td>...</td>
-                  <td>...</td>
-                </tr>
-              </Fragment>
-            )}
-          </tbody>
-        </table>
-      </div>
-    );
-  });
+  return (
+    <div className={styles.table}>
+      {data.logs.map((el, _) => {
+        return (
+          <div
+            className={styles["table-content"]}
+            key={el.batch + `${el.category && `_${el.category}`}`}
+          >
+            <motion.h3
+              whileHover={{ cursor: "pointer", scale: 1.1 }}
+              onClick={() =>
+                handleGetSingleBatch(el.batch!, el.date!, el.category)
+              }
+            >
+              Batch {el.batch}
+            </motion.h3>
+            <h3>
+              {el.category &&
+                el.category.charAt(0).toUpperCase() + el.category?.slice(1)}
+            </h3>
+          </div>
+        );
+      })}
+    </div>
+  );
 };
 
 export default Table;

@@ -49,7 +49,8 @@ const Signup: React.FC = () => {
 
   return (
     <div className={styles.display}>
-      <h1>Signup Form</h1>
+      {/* <h1>Signup Form</h1> */}
+      <h1>Signup On Process</h1>
       <div>
         <form className={styles.form}>
           <label htmlFor="username">Username</label>

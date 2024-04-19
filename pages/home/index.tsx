@@ -15,23 +15,27 @@ const Home: React.FC = () => {
 
   const [fyi, setFyi] = useState<string>();
 
-  const fetchFyi = async () =>
-    fetch(`http://numbersapi.com/${month}/${day}/date`)
-      .then((data) => {
-        return data.text();
-      })
-      .then((text) => setFyi(text))
-      .catch((err) => console.error(err));
+  const fetchFyi = async () => {
+    try {
+      const response = await fetch(
+        `http://numbersapi.com/${month}/${day}/date`
+      );
+
+      const result = await response.text();
+
+      setFyi(result);
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
 
   useEffect(() => {
     if (loginSelector.token === "") {
       router.push("/");
     }
-  }, []);
 
-  useEffect(() => {
     fetchFyi();
-  }, []);
+  }, [loginSelector.token]);
 
   return (
     <div className={styles.home}>
@@ -40,7 +44,7 @@ const Home: React.FC = () => {
           <div className={styles["home-title"]}>
             <h1>Welcome {loginSelector.username}.</h1>
             <p>This is a monitoring/dashboard app for SLIK update scheduler.</p>
-            <p>Made with React - Next.js, TypeScript, and Love.</p>
+            <p>Made with React - Next.js, TypeScript, and ♡.</p>
             <p>
               Feel free to modify things in here{" "}
               {"(as long as it doesn't disrupt the functionality)."}
@@ -51,7 +55,7 @@ const Home: React.FC = () => {
               Today's Interesting Fact
             </h1>
             <p>{fyi}</p>
-            <button type="button" onClick={async () => fetchFyi()}>
+            <button type="button" onClick={fetchFyi}>
               Tell me more!
             </button>
           </div>

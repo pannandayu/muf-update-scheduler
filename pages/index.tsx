@@ -1,20 +1,20 @@
-import styles from "@/styles/Index.module.css";
-import loginValidationSchema from "@/validations/LoginValidation";
-import { FormEventHandler, Fragment, useRef, useState } from "react";
-import { ZodError } from "zod";
 import { LoginDataInput } from "@/interfaces/IAuth";
 import { useAppDispatch } from "@/redux/hooks";
 import { loginThunk } from "@/redux/thunks";
+import styles from "@/styles/Index.module.css";
+import loginValidationSchema from "@/validations/LoginValidation";
 import { useRouter } from "next/router";
+import { FormEventHandler, Fragment, useRef, useState } from "react";
+import { ZodError } from "zod";
 
 const Index: React.FC = () => {
+  const dispatch = useAppDispatch();
+
   const usernameRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
   const [validationError, setValidationError] = useState<ZodError>();
   const [authError, setAuthError] = useState<string>();
-
-  const dispatch = useAppDispatch();
 
   const router = useRouter();
 
@@ -49,7 +49,7 @@ const Index: React.FC = () => {
 
   return (
     <div className={styles.display}>
-      <h1>Update Scheduler Monitoring</h1>
+      <h1>SLIK Update Scheduler</h1>
       <div>
         <form className={styles.form} method="POST" onSubmit={loginHandler}>
           <label htmlFor="username">Username</label>

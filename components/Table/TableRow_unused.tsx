@@ -1,8 +1,8 @@
-import { UpdateDataProps } from "@/interfaces/IMonitor";
+import { UpdateDataID } from "@/interfaces/IMonitor";
 import { Fragment } from "react";
 
 const TableRow: React.FC<{
-  props: UpdateDataProps;
+  props: UpdateDataID;
 }> = ({ props }) => {
   const { request_id, app_id, application_no } = props;
 
