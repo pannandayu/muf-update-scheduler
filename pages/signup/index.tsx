@@ -4,7 +4,7 @@ import { signupThunk } from "@/redux/thunks";
 import styles from "@/styles/Index.module.css";
 import signupValidationSchema from "@/validations/SignupValidation";
 import { useRouter } from "next/router";
-import { FormEventHandler, Fragment, useRef, useState } from "react";
+import { FormEvent, Fragment, useRef, useState } from "react";
 import { ZodError } from "zod";
 
 const Signup: React.FC = () => {
@@ -19,7 +19,7 @@ const Signup: React.FC = () => {
   const [validationError, setValidationError] = useState<ZodError>();
   const [authError, setAuthError] = useState<string>();
 
-  const signupHandler: FormEventHandler = (event) => {
+  const signupHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     const signupData: SignupDataInput = {
@@ -52,7 +52,7 @@ const Signup: React.FC = () => {
       {/* <h1>Signup Form</h1> */}
       <h1>Signup On Process</h1>
       <div>
-        <form className={styles.form}>
+        <form className={styles.form} onSubmit={signupHandler}>
           <label htmlFor="username">Username</label>
           <input type="text" name="username" id="username" ref={usernameRef} />
           <br />
@@ -67,9 +67,7 @@ const Signup: React.FC = () => {
           <label htmlFor="key">Key</label>
           <input type="password" name="key" id="key" ref={keyRef} />
           <br />
-          <button onClick={signupHandler} type="submit">
-            Submit
-          </button>
+          <button type="submit">Submit</button>
           <br />
           <button
             type="button"

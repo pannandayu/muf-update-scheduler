@@ -1,4 +1,4 @@
-import { UpdateDataID } from "@/interfaces/IMonitor";
+import { UpdateDataID } from "@/interfaces/IData";
 import { Fragment } from "react";
 
 const TableRow: React.FC<{

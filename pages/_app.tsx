@@ -1,4 +1,3 @@
-import { useAppSelector } from "@/redux/hooks";
 import store from "@/redux/store";
 import "@/styles/globals.css";
 import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
@@ -7,8 +6,8 @@ import { Provider } from "react-redux";
 
 export default function App({ Component, pageProps }: AppProps) {
   const client = new ApolloClient({
-    uri: "http://localhost:3001/graphql",
-    cache: new InMemoryCache(),
+    uri: "http://slik-update-scheduler-monitor-dev.apps.ocp4dev.muf.co.id/",
+    cache: new InMemoryCache({'resultCaching': }),
   });
 
   return (

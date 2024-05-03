@@ -2,6 +2,7 @@
   "name": "slik_monitoring",
   "version": "0.1.0",
   "private": true,
+  "description": "SLIK Update Scheduler UI",
   "author": {
     "name": "15997431"
   },

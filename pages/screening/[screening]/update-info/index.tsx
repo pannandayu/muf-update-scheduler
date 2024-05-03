@@ -1,13 +1,12 @@
 import { useAppSelector } from "@/redux/hooks";
 import { gql, useLazyQuery } from "@apollo/client";
 import { useRouter } from "next/router";
-import { FormEvent, Fragment, useEffect, useState } from "react";
+import { FormEvent, Fragment, useEffect, useMemo, useState } from "react";
 import styles from "@/styles/UpdateInfo.module.css";
 import Checkbox from "@/components/Checkbox";
-import { LogData } from "@/interfaces/IMonitor";
+import { LogData } from "@/interfaces/IData";
 
 const UpdateInfo: React.FC = () => {
-  const router = useRouter();
   const loginSelector = useAppSelector((state) => state.auth.login);
 
   const [queryParams, setQueryParams] = useState<FormDataEntryValue[]>();
@@ -16,6 +15,7 @@ const UpdateInfo: React.FC = () => {
   const [resultsChecked, setResultsChecked] = useState<boolean>();
   const [logData, setLogData] = useState<LogData>();
 
+  const router = useRouter();
   const { batch, date, screening, category } = router.query;
 
   const handleQuery = (event: FormEvent<HTMLFormElement>) => {
@@ -30,10 +30,8 @@ const UpdateInfo: React.FC = () => {
   };
 
   const GET_LOG = gql`
-  query getLog {
-    log(screening: ${screening}, date: "${date}", batch: ${batch} ${
-    category ? `,category: "${category}"` : ""
-  }) {
+  query getLog($screening: Int!, $date: String!, $batch: Int!, $category: String) {
+    log(screening: $screening, date: $date, batch: $batch, category: $category) {
       _id
       ${
         queryParams
@@ -72,10 +70,16 @@ const UpdateInfo: React.FC = () => {
         }`,
       },
     },
+    variables: {
+      screening: +screening!,
+      date: date,
+      batch: +batch!,
+      category: category || null,
+    },
   });
 
   useEffect(() => {
-    if (loginSelector.token == "") {
+    if (loginSelector.token === "") {
       router.push("/");
     }
 

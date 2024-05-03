@@ -22,4 +22,10 @@ interface LogData {
   elapsedTime?: number;
 }
 
-export type { UpdateDataID, LogResult, LogData };
+interface PushUpdateData {
+  updateKey: string;
+  screening: number;
+  token: string;
+}
+
+export type { UpdateDataID, LogResult, LogData, PushUpdateData };

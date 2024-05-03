@@ -4,7 +4,7 @@ import { loginThunk } from "@/redux/thunks";
 import styles from "@/styles/Index.module.css";
 import loginValidationSchema from "@/validations/LoginValidation";
 import { useRouter } from "next/router";
-import { FormEventHandler, Fragment, useRef, useState } from "react";
+import { FormEvent, Fragment, useRef, useState } from "react";
 import { ZodError } from "zod";
 
 const Index: React.FC = () => {
@@ -18,7 +18,7 @@ const Index: React.FC = () => {
 
   const router = useRouter();
 
-  const loginHandler: FormEventHandler = (event) => {
+  const loginHandler = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setValidationError(undefined);
     setAuthError(undefined);
@@ -51,7 +51,7 @@ const Index: React.FC = () => {
     <div className={styles.display}>
       <h1>SLIK Update Scheduler</h1>
       <div>
-        <form className={styles.form} method="POST" onSubmit={loginHandler}>
+        <form className={styles.form} onSubmit={loginHandler}>
           <label htmlFor="username">Username</label>
           <input type="text" name="username" id="username" ref={usernameRef} />
           <br />

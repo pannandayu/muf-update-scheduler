@@ -1,4 +1,4 @@
-import { LogData } from "@/interfaces/IMonitor";
+import { LogData } from "@/interfaces/IData";
 import styles from "@/styles/Table.module.css";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";

@@ -10,6 +10,7 @@ const Modal: React.FC<{
   useEffect(() => {
     return () => {
       document.body.removeAttribute("style");
+      document.body.removeAttribute("class");
       document.body.querySelector(".ReactModalPortal")?.remove();
     };
   }, []);

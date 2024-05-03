@@ -33,8 +33,6 @@ const Home: React.FC = () => {
     if (loginSelector.token === "") {
       router.push("/");
     }
-
-    fetchFyi();
   }, [loginSelector.token]);
 
   return (
@@ -52,11 +50,11 @@ const Home: React.FC = () => {
           </div>
           <div>
             <h1 style={{ fontFamily: "Montserrat" }}>
-              Today's Interesting Fact
+              Today{"'"}s Interesting Facts
             </h1>
             <p>{fyi}</p>
             <button type="button" onClick={fetchFyi}>
-              Tell me more!
+              Tell me{fyi && " more"}!
             </button>
           </div>
         </div>

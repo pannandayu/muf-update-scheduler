@@ -26,6 +26,7 @@ const loginThunk = createAsyncThunk(
     return result;
   }
 );
+
 const signupThunk = createAsyncThunk(
   "authentication/signup",
   async (signupData: SignupDataInput) => {
@@ -50,91 +51,4 @@ const signupThunk = createAsyncThunk(
     return result;
   }
 );
-
-// const monitorThunk = createAsyncThunk(
-//   "data/monitor",
-//   async (data: { token: string; screening: string }) => {
-//     const response = await fetch("/api/monitor", {
-//       method: "GET",
-//       headers: {
-//         Authorization: "Bearer: " + data.token,
-//         Etag: data.screening,
-//       },
-//     });
-
-//     const result: UpdateDataRecord = await response.json();
-
-//     if (response.status !== 200) {
-//       throw new Error(
-//         result.message === "fetch failed"
-//           ? "Get monitoring data logic (server) error"
-//           : result.message
-//       );
-//     }
-
-//     return result;
-//   }
-// );
-
-// MAYBE USED
-// const pushUpdateThunk = createAsyncThunk(
-//   "data/push-update",
-//   async (key: { updateKey: string }) => {
-//     const response = await fetch("/api/push-update", {
-//       method: "POST",
-//       body: JSON.stringify(key),
-//       headers: { "Content-Type": "application/json" },
-//     });
-
-//     const result: PushUpdateDataReturn = await response.json();
-
-//     if (response.status !== 200) {
-//       throw new Error(
-//         result.message === "fetch failed"
-//           ? "Push update logic (server) error"
-//           : result.message
-//       );
-//     }
-
-//     return result;
-//   }
-// );
-
-// const getBatchDataThunk = createAsyncThunk(
-//   "data/get-batch-data",
-//   async (data: { dateTime: string; token: string }) => {
-//     const response = await fetch("/api/get-batch-data", {
-//       method: "POST",
-//       body: JSON.stringify({ dateTime: data.dateTime }),
-//       headers: {
-//         "Content-Type": "application/json",
-//         Authorization: "Bearer: " + data.token,
-//       },
-//     });
-
-//     interface GetBatchDataExpectedResult {
-//       message?: string;
-//       data?: UpdateDataCurrent;
-//     }
-
-//     const result: GetBatchDataExpectedResult = await response.json();
-
-//     if (response.status !== 200) {
-//       throw new Error(
-//         result.message === "fetch failed"
-//           ? "Get Batch logic (server) error"
-//           : result.message
-//       );
-//     }
-
-//     return result;
-//   }
-// );
-
-export {
-  // getBatchDataThunk,
-  loginThunk,
-  // monitorThunk,
-  // pushUpdateThunk,
-  signupThunk,
-};
+export { loginThunk, signupThunk };
