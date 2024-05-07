@@ -7,7 +7,7 @@ import { Provider } from "react-redux";
 export default function App({ Component, pageProps }: AppProps) {
   const client = new ApolloClient({
     uri: "http://slik-update-scheduler-monitor-dev.apps.ocp4dev.muf.co.id/",
-    cache: new InMemoryCache({'resultCaching': }),
+    cache: new InMemoryCache(),
   });
 
   return (
