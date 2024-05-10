@@ -41,7 +41,7 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
-<br />
+#
 
 === Developer's Documentation ===
 
@@ -116,7 +116,7 @@ Once the application is running, you can do these things:
 
 ### - Tech Stack
 
-1. Frontend : **React.js - [Next.js](https://koajs.com)(framework) + TypeScript**
+1. Frontend : **React.js - [Next.js](https://koajs.com) (framework) + TypeScript**
 2. Backend : **Node.js - [Express](https://expressjs.com), [Apollo](https://apollographql.com/), [Koa](https://koajs.com)**
 3. API : **RESTful API & [GraphQL](https://graphql.org/)**
 
@@ -125,8 +125,8 @@ Once the application is running, you can do these things:
 1. /api/login
 2. /api/push-update-self
 3. /api/push-update-aggregate
-4. /graphql -- get all logs for specified date
-5. /graphql -- get detailed information of a single log
+4. /graphql -- GetLogs: get all logs for specified date
+5. /graphql -- GetLog: get detailed information of a single log
 
 ## Configuration
 

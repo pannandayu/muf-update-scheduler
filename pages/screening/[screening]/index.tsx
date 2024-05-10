@@ -18,7 +18,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 type UpdateDataRecord = UpdateDataID & { status_applicant?: string };
-type UpdatedFailed = { error: { message: string; status: number } } | string;
+type UpdatedFailed = { error: { message: string; status: number } };
 type UpdateSuccess = { data: UpdateDataRecord[] };
 
 const Screening: React.FC = () => {
@@ -118,12 +118,7 @@ const Screening: React.FC = () => {
   const handleUpdateResult = (updateResult: {
     response: UpdateSuccess | UpdatedFailed;
   }) => {
-    if (typeof updateResult.response === "string") {
-      toast.error(updateResult.response.toString(), {
-        autoClose: 2000,
-        theme: "dark",
-      });
-    } else {
+    if (typeof updateResult === "object") {
       if ("error" in updateResult.response) {
         toast.error(updateResult.response.error.message, {
           autoClose: 2000,

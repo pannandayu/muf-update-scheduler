@@ -25,7 +25,17 @@ const pushUpdateHandler = async (req: NextApiRequest, res: NextApiResponse) => {
       },
     });
 
-    const result = await response.json();
+    let result;
+    if (!response.ok) {
+      if (screening === 1) {
+        result = await response.json();
+      } else {
+        const errorText = await response.text();
+        result = { error: { message: errorText, status: response.status } };
+      }
+    } else {
+      result = await response.json();
+    }
 
     return res.status(response.status).json({ response: result });
   } catch (err: any) {
