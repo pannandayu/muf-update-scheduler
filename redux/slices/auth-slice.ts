@@ -1,20 +1,26 @@
 import { loginThunk, signupThunk } from "@/redux/thunks";
 import { createSlice } from "@reduxjs/toolkit";
 
+const defaultLoginValue = {
+  message: "",
+  username: "",
+  role: "",
+  token: "",
+};
+
 export const authSlice = createSlice({
   name: "authentication",
   initialState: {
-    login: {
-      message: "",
-      username: "",
-      role: "",
-      token: "",
-    },
+    login: defaultLoginValue,
     signup: {
       message: "",
     },
   },
-  reducers: {},
+  reducers: {
+    logout: (state) => {
+      state.login = defaultLoginValue;
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(loginThunk.fulfilled, (state, action) => {
       const { message, username, role, token } = action.payload;

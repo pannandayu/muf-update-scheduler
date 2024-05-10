@@ -7,7 +7,7 @@ export const dataSlice = createSlice({
     date: moment(new Date()).format("DD-MM-YYYY"),
   },
   reducers: {
-    setDate(state, action) {
+    setDate: (state, action) => {
       state.date = action.payload;
     },
   },

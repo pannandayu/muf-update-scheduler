@@ -1,12 +1,14 @@
-import { useAppSelector } from "@/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { authSliceActions } from "@/redux/slices/auth-slice";
 import styles from "@/styles/Home.module.css";
 import moment from "moment";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { MouseEvent, useEffect, useState } from "react";
 
 const Home: React.FC = () => {
   const loginSelector = useAppSelector((state) => state.auth.login);
+  const dispatch = useAppDispatch();
   const router = useRouter();
 
   const date = moment(Date.now()).format("DD-MM-YYYY");
@@ -29,6 +31,11 @@ const Home: React.FC = () => {
     }
   };
 
+  const handleLogout = (event: MouseEvent) => {
+    event.preventDefault();
+    dispatch(authSliceActions.logout());
+  };
+
   useEffect(() => {
     if (loginSelector.token === "") {
       router.push("/");
@@ -49,13 +56,21 @@ const Home: React.FC = () => {
             </p>
           </div>
           <div>
-            <h1 style={{ fontFamily: "Montserrat" }}>
-              Today{"'"}s Interesting Fact
-            </h1>
-            <p>{fyi}</p>
-            <button type="button" onClick={fetchFyi}>
-              Tell me{fyi && " more"}!
-            </button>
+            <div>
+              <h1 style={{ fontFamily: "Montserrat" }}>
+                Today{"'"}s Interesting Fact
+              </h1>
+              <p>{fyi}</p>
+              <button type="button" onClick={fetchFyi}>
+                Tell me{fyi && " more"}!
+              </button>
+            </div>
+
+            <div style={{ marginTop: "5rem" }}>
+              <button className={styles.logout} onClick={handleLogout}>
+                Logout
+              </button>
+            </div>
           </div>
         </div>
         <div className={styles["screening-picker"]}>
