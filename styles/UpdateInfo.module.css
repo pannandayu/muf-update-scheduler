@@ -46,14 +46,11 @@
   font-family: "Lato";
 }
 
-
-
 .table table {
   width: 100%;
   border-collapse: collapse;
   border-radius: 10px;
 }
-
 
 .table th {
   background-color: #f2f2f2;
@@ -63,11 +60,9 @@
   text-align: center;
 }
 
-
 .table tr:nth-child(even) {
   background-color: #f9f9f9;
 }
-
 
 .table td {
   padding: 8px;

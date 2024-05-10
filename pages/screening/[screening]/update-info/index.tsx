@@ -1,10 +1,10 @@
-import { useAppSelector } from "@/redux/hooks";
-import { gql, useLazyQuery } from "@apollo/client";
-import { useRouter } from "next/router";
-import { FormEvent, Fragment, useEffect, useMemo, useState } from "react";
-import styles from "@/styles/UpdateInfo.module.css";
 import Checkbox from "@/components/Checkbox";
 import { LogData } from "@/interfaces/IData";
+import { useAppSelector } from "@/redux/hooks";
+import styles from "@/styles/UpdateInfo.module.css";
+import { gql, useLazyQuery } from "@apollo/client";
+import { useRouter } from "next/router";
+import { FormEvent, Fragment, useEffect, useState } from "react";
 
 const UpdateInfo: React.FC = () => {
   const loginSelector = useAppSelector((state) => state.auth.login);
@@ -30,7 +30,7 @@ const UpdateInfo: React.FC = () => {
   };
 
   const GET_LOG = gql`
-  query getLog($screening: Int!, $date: String!, $batch: Int!, $category: String) {
+  query GetLog($screening: Int!, $date: String!, $batch: Int!, $category: String) {
     log(screening: $screening, date: $date, batch: $batch, category: $category) {
       _id
       ${

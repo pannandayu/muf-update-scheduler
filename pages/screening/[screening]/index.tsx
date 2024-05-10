@@ -1,7 +1,7 @@
 import Loading from "@/components/Loading";
 import Modal from "@/components/Modal";
 import Table from "@/components/Table/Table";
-import { PushUpdateData } from "@/interfaces/IData";
+import { PushUpdateData, UpdateDataID } from "@/interfaces/IData";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
 import { dataSliceActions } from "@/redux/slices/data-slice";
 import styles from "@/styles/Screening.module.css";
@@ -14,6 +14,12 @@ import { useRouter } from "next/router";
 import React, { FormEvent, useEffect, useRef, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+type UpdateDataRecord = UpdateDataID & { status_applicant?: string };
+type UpdatedFailed = { error: { message: string; status: number } } | string;
+type UpdateSuccess = { data: UpdateDataRecord[] };
 
 const Screening: React.FC = () => {
   const loginSelector = useAppSelector((state) => state.auth.login);
@@ -60,19 +66,80 @@ const Screening: React.FC = () => {
       return;
     }
 
-    proceedPushUpdate({ ...validationResult.data, token: loginSelector.token });
-  };
-
-  const proceedPushUpdate = async (data: PushUpdateData) => {
-    const response = await fetch("/api/push-update", {
-      method: "POST",
-      body: JSON.stringify(data),
-      headers: { "Content-Type": "application/json" },
+    proceedPushUpdate({
+      ...validationResult.data,
+      token: loginSelector.token,
     });
   };
 
+  const proceedPushUpdate = async (data: PushUpdateData) => {
+    try {
+      const resultSelf = await handleSelfUpdate(data);
+      handleUpdateResult(resultSelf);
+      if (data.screening !== 1) {
+        const resultAggregate = await handleAggregateUpdate(data);
+        handleUpdateResult(resultAggregate);
+      }
+    } catch (err: any) {
+      console.error(err);
+    }
+  };
+
+  const handleSelfUpdate = async (data: PushUpdateData) => {
+    const responseSelf = await fetch("/api/push-update-self", {
+      method: "POST",
+      body: JSON.stringify({
+        updateKey: data.updateKey,
+        screening: data.screening,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer: " + data.token,
+      },
+    });
+    return await responseSelf.json();
+  };
+
+  const handleAggregateUpdate = async (data: PushUpdateData) => {
+    const responseAggregate = await fetch("/api/push-update-aggregate", {
+      method: "POST",
+      body: JSON.stringify({
+        updateKey: data.updateKey,
+        screening: data.screening,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer: " + data.token,
+      },
+    });
+    return await responseAggregate.json();
+  };
+
+  const handleUpdateResult = (updateResult: {
+    response: UpdateSuccess | UpdatedFailed;
+  }) => {
+    if (typeof updateResult.response === "string") {
+      toast.error(updateResult.response.toString(), {
+        autoClose: 2000,
+        theme: "dark",
+      });
+    } else {
+      if ("error" in updateResult.response) {
+        toast.error(updateResult.response.error.message, {
+          autoClose: 2000,
+          theme: "dark",
+        });
+      } else {
+        toast.success("Push update successful!", {
+          autoClose: 2000,
+          theme: "dark",
+        });
+      }
+    }
+  };
+
   const GET_LOGS = gql`
-    query getLogs($screening: Int!, $date: String!) {
+    query GetLogs($screening: Int!, $date: String!) {
       logs(screening: $screening, date: $date) {
         batch
         category
@@ -124,7 +191,7 @@ const Screening: React.FC = () => {
           margin: "auto auto 1rem auto",
         }}
       ></div>
-
+      <ToastContainer />
       {loading ? (
         <Loading />
       ) : data ? (

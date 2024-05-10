@@ -41,8 +41,8 @@ const Home: React.FC = () => {
         <div style={{ maxWidth: "40%" }}>
           <div className={styles["home-title"]}>
             <h1>Welcome {loginSelector.username}.</h1>
-            <p>This is a monitoring/dashboard app for SLIK update scheduler.</p>
-            <p>Made with React - Next.js, TypeScript, and ♡.</p>
+            <p>This is the UI for SLIK update scheduler.</p>
+            <p>Made with React.js - Next.js, TypeScript, and ♡.</p>
             <p>
               Feel free to modify things in here{" "}
               {"(as long as it doesn't disrupt the functionality)."}
@@ -50,7 +50,7 @@ const Home: React.FC = () => {
           </div>
           <div>
             <h1 style={{ fontFamily: "Montserrat" }}>
-              Today{"'"}s Interesting Facts
+              Today{"'"}s Interesting Fact
             </h1>
             <p>{fyi}</p>
             <button type="button" onClick={fetchFyi}>

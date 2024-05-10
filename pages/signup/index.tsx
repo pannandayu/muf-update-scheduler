@@ -50,8 +50,17 @@ const Signup: React.FC = () => {
   return (
     <div className={styles.display}>
       {/* <h1>Signup Form</h1> */}
-      <h1>Signup On Process</h1>
-      <div>
+      <h1>Signup still ongoing</h1>
+      <button
+        type="button"
+        onClick={(e) => {
+          e.preventDefault();
+          router.push("/");
+        }}
+      >
+        Back to Login Page
+      </button>
+      {/* <div>
         <form className={styles.form} onSubmit={signupHandler}>
           <label htmlFor="username">Username</label>
           <input type="text" name="username" id="username" ref={usernameRef} />
@@ -90,7 +99,7 @@ const Signup: React.FC = () => {
               </p>
             </Fragment>
           );
-        })}
+        })} */}
     </div>
   );
 };

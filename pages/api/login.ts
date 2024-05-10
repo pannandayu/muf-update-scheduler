@@ -6,7 +6,9 @@ const loginHandler = async (req: NextApiRequest, res: NextApiResponse) => {
     const response = await fetch(`${process.env.LOGIN_NODE}`, {
       method: req.method,
       body: JSON.stringify(req.body),
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": req.headers["content-type"] || "application/json",
+      },
     });
 
     const result: LoginDataReturn = await response.json();

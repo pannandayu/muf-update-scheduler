@@ -4,7 +4,7 @@ import { loginThunk } from "@/redux/thunks";
 import styles from "@/styles/Index.module.css";
 import loginValidationSchema from "@/validations/LoginValidation";
 import { useRouter } from "next/router";
-import { FormEvent, Fragment, useRef, useState } from "react";
+import { FormEvent, useRef, useState } from "react";
 import { ZodError } from "zod";
 
 const Index: React.FC = () => {
@@ -48,9 +48,11 @@ const Index: React.FC = () => {
   };
 
   return (
-    <div className={styles.display}>
-      <h1>SLIK Update Scheduler</h1>
-      <div>
+    <div className={styles.container}>
+      <header className={styles.header}>
+        <h1>Welcome to SLIK Update Scheduler</h1>
+      </header>
+      <div className={styles.content}>
         <form className={styles.form} onSubmit={loginHandler}>
           <label htmlFor="username">Username</label>
           <input type="text" name="username" id="username" ref={usernameRef} />
@@ -76,18 +78,16 @@ const Index: React.FC = () => {
           </button>
         </form>
       </div>
-      <br />
-      {<p style={{ color: "red" }}>{authError}</p>}
+      <footer className={styles.footer}>
+        <p>&copy; 2024 ICT Acquisition Solution</p>
+      </footer>
+      {authError && <p className={styles.error}>{authError}</p>}
       {validationError &&
-        validationError.errors.map((el, index) => {
-          return (
-            <Fragment key={index}>
-              <p style={{ color: "red" }}>
-                {el.path + el.message.replace("String", "")}
-              </p>
-            </Fragment>
-          );
-        })}
+        validationError.errors.map((el, index) => (
+          <p key={index} className={styles.error}>
+            {el.path + el.message.replace("String", "")}
+          </p>
+        ))}
     </div>
   );
 };
